@@ -1,0 +1,25 @@
+@startuml
+title PrintXpress - Customer registration
+
+start
+:Open Register screen;
+:Enter full name, email, phone,\npassword, and confirmation;
+if (All input valid?) then (yes)
+  :Look up email in local SQLite database;
+  if (Email already registered?) then (yes)
+    :Show duplicate-email error;
+    stop
+  else (no)
+    :Hash password;
+    :Insert user record;
+    if (Insert succeeded?) then (yes)
+      :Show success and continue to login/home;
+    else (no)
+      :Show registration failure;
+    endif
+  endif
+else (no)
+  :Show field-specific errors;
+endif
+stop
+@enduml

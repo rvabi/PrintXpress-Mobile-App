@@ -1,0 +1,115 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+package "Domain models" {
+  class User {
+    +userId: long
+    +fullName: String
+    +email: String
+    +phone: String
+    +passwordHash: String
+  }
+  class Address {
+    +addressId: long
+    +userId: long
+    +addressLine: String
+    +city: String
+    +district: String
+    +postalCode: String
+  }
+  class Category {
+    +categoryId: long
+    +categoryName: String
+  }
+  class Product {
+    +productId: long
+    +categoryId: long
+    +productName: String
+    +description: String
+    +basePrice: double
+    +imageName: String
+  }
+  class ProductOption {
+    +optionId: long
+    +productId: long
+    +optionType: String
+    +optionValue: String
+    +priceAdjustment: double
+  }
+  class Order {
+    +orderId: long
+    +userId: long
+    +orderDate: String
+    +orderType: String
+    +deliveryAddress: String
+    +scheduledFor: String
+    +rescheduledAt: String
+    +totalAmount: double
+    +status: String
+  }
+  class OrderItem {
+    +orderItemId: long
+    +orderId: long
+    +productId: long
+    +quantity: int
+    +customText: String
+    +artworkPath: String
+    +unitPrice: double
+    +subtotal: double
+  }
+  class OrderItemOption {
+    +orderItemOptionId: long
+    +orderItemId: long
+    +optionId: long
+    +priceAdjustment: double
+  }
+  class SavedDesign {
+    +designId: long
+    +userId: long
+    +designName: String
+    +filePath: String
+  }
+  class Notification {
+    +notificationId: long
+    +userId: long
+    +title: String
+    +message: String
+    +createdAt: String
+    +isRead: boolean
+  }
+  class Promotion {
+    +promotionId: long
+    +title: String
+    +description: String
+    +discount: double
+    +startDate: String
+    +endDate: String
+  }
+}
+
+package "Persistence" {
+  class DatabaseHelper {
+    +createUser(user: User): long
+    +getProductsByCategory(categoryId: long): List
+    +createOrder(order: Order, items: List): long
+    +getOrdersForUser(userId: long): List
+    +updateOrderSchedule(orderId: long, scheduledFor: String): boolean
+    +cancelProcessingOrder(orderId: long): boolean
+  }
+}
+
+User "1" -- "0..*" Address
+User "1" -- "0..*" Order
+User "1" -- "0..*" SavedDesign
+User "1" -- "0..*" Notification
+Category "1" -- "0..*" Product
+Product "1" -- "0..*" ProductOption
+Product "1" -- "0..*" OrderItem
+Order "1" -- "1..*" OrderItem
+OrderItem "1" -- "0..*" OrderItemOption
+ProductOption "1" -- "0..*" OrderItemOption
+DatabaseHelper ..> User
+DatabaseHelper ..> Product
+DatabaseHelper ..> Order
+DatabaseHelper ..> Promotion
+@enduml

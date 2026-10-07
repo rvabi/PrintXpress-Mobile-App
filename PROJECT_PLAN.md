@@ -47,33 +47,38 @@ Saved designs, print guidelines, FAQ/support, address management, and logout may
 
 ## Database plan
 
-Use a local SQLite database named **PrintXpressDB**. Enable foreign keys, use integer primary keys, and keep data access in DatabaseHelper. Dates will use a consistent stored format. Seed the seven categories and an original starter catalogue once.
+Use a local SQLite database named **PrintXpressDB**. Enable foreign keys, use integer primary keys, and keep data access in DatabaseHelper. Store dates and times consistently as text. Seed the seven categories and an original starter catalogue once. The approved relational design contains eleven tables:
 
-| Table | Initial columns | Relationship |
+| Table | Columns | Relationships |
 | --- | --- | --- |
-| users | user_id, full_name, email, phone, password | Parent of addresses, orders, saved designs, notifications |
+| users | user_id, full_name, email, phone, password | Parent of addresses, orders, saved_designs, notifications |
 | addresses | address_id, user_id, address_line, city, district, postal_code | user_id → users |
 | categories | category_id, category_name | Parent of products |
 | products | product_id, category_id, product_name, description, base_price, image_name | category_id → categories |
-| orders | order_id, user_id, order_date, order_type, delivery_address, total_amount, status | user_id → users |
-| order_items | order_item_id, order_id, product_id, quantity, size, material, custom_text, artwork_path, unit_price, subtotal | order_id → orders; product_id → products |
+| product_options | option_id, product_id, option_type, option_value, price_adjustment | product_id → products |
+| orders | order_id, user_id, order_date, order_type, delivery_address, scheduled_for, rescheduled_at, total_amount, status | user_id → users |
+| order_items | order_item_id, order_id, product_id, quantity, custom_text, artwork_path, unit_price, subtotal | order_id → orders; product_id → products |
+| order_item_options | order_item_option_id, order_item_id, option_id, price_adjustment | order_item_id → order_items; option_id → product_options |
 | saved_designs | design_id, user_id, design_name, file_path | user_id → users |
 | notifications | notification_id, user_id, title, message, created_at, is_read | user_id → users |
 | promotions | promotion_id, title, description, discount, start_date, end_date | Independent offer records |
 
-The planned status values are Processing, Printing, Ready for Pickup, Out for Delivery, Completed, and Cancelled. Cancellation and rescheduling are permitted only while an order is Processing. An additional scheduled date/time field may be needed in orders for rescheduling. Product option definitions and price adjustments may need a small related table rather than hard-coded choices; decide this during Phase 2 before writing the schema. Keep a delivery address snapshot with the order so history remains understandable after profile changes.
+The orders.scheduled_for TEXT field records the customer's current selected pickup or delivery date/time. The nullable orders.rescheduled_at TEXT field records the most recent rescheduling action. Both values will use one documented timestamp format. The planned statuses are Processing, Printing, Ready for Pickup, Out for Delivery, Completed, and Cancelled. The customer may cancel or reschedule **only** when status is Processing; all five other statuses reject both actions.
 
-Database operations will cover account lookup/create/update, address CRUD, catalogue reads, saved design CRUD, order creation in a transaction, order/history/status reads, permitted order updates, notifications, and promotions. Passwords must never be stored as plain text even though the required column is named password; the exact student-friendly hashing approach will be documented before implementation.
+Product choices are rows in product_options: option_id INTEGER PRIMARY KEY AUTOINCREMENT, product_id INTEGER NOT NULL, option_type TEXT NOT NULL, option_value TEXT NOT NULL, and price_adjustment REAL NOT NULL DEFAULT 0, with a foreign key to products. Example types are Size, Material, Print Side, Finish, Colour, and Paper Type; example values include A4, A3, Matte, Glossy, Front Only, and Front and Back.
+
+Selected choices are rows in order_item_options: order_item_option_id INTEGER PRIMARY KEY AUTOINCREMENT, order_item_id INTEGER NOT NULL, option_id INTEGER NOT NULL, and price_adjustment REAL NOT NULL DEFAULT 0, with foreign keys to order_items and product_options. Its adjustment is a checkout-time price snapshot. order_items has no fixed size or material columns; it holds order_item_id INTEGER PRIMARY KEY AUTOINCREMENT, order_id INTEGER NOT NULL, product_id INTEGER NOT NULL, quantity INTEGER NOT NULL, custom_text TEXT, artwork_path TEXT, unit_price REAL NOT NULL, and subtotal REAL NOT NULL, with foreign keys to orders and products.
+
+Keep a delivery address snapshot in orders so history remains understandable after profile edits. Database operations will cover account lookup/create/update, address CRUD, catalogue and option reads, saved design CRUD, order creation in a transaction, order/history/status reads, permitted order updates, notifications, and promotions. Passwords must never be stored as plain text even though the required column is named password; the exact student-friendly hashing approach will be documented before implementation. See docs/database/database-design.md, schema.md, and normalization.md.
 
 ## Validation and business rules
-
 - Require a name, valid email and phone number, a suitable password, and matching confirmation.
 - Reject duplicate email addresses; never save an invalid registration.
 - Require all product options needed by the selected product and quantity greater than zero.
 - Require artwork or custom text when the selected print product needs customer content.
 - Require a saved or entered address for Home Delivery; pickup needs no delivery address.
 - Calculate the order total from item data and save order and item rows together.
-- Permit cancellation or rescheduling only before Printing begins; make status changes visible in order details.
+- Permit cancellation or rescheduling only when status is Processing; reject both actions for Printing, Ready for Pickup, Out for Delivery, Completed, and Cancelled.
 
 Exact input limits and price rules will be set during implementation and recorded in the technical documentation.
 
@@ -145,4 +150,4 @@ Keep Git commits tied to actual completed work. Do not commit build output, loca
 
 ## Current status and next gate
 
-Phase 1 planning files and documentation directories are being prepared. The application has not been scaffolded, built, executed, or tested. Next, review the proposed Android project structure and schema additions. After agreement, create a minimal native Android Studio project in Phase 1 and verify it in Android Studio when the toolchain is available.
+Phase 1 planning files and documentation directories are prepared. The eleven-table database design is approved and documented for Task B, with PlantUML source diagrams prepared. The application has not been scaffolded, built, executed, or tested. Tomorrow, create the native Java/XML Android Studio project on the laptop with Android Studio, using the installed compatible SDK and Gradle defaults; then verify a clean sync and launch before implementing database code.

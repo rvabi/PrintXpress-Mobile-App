@@ -1,0 +1,61 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor Customer
+
+rectangle "PrintXpress Mobile Application" {
+  usecase "Register" as UC_Register
+  usecase "Login" as UC_Login
+  usecase "Manage Profile" as UC_Profile
+  usecase "Manage Address" as UC_Address
+  usecase "Browse Categories" as UC_Categories
+  usecase "Browse Products" as UC_Products
+  usecase "View Product Details" as UC_Details
+  usecase "Customize Product" as UC_Customize
+  usecase "Upload Artwork" as UC_Artwork
+  usecase "Enter Custom Text" as UC_Text
+  usecase "Select Pickup or Delivery" as UC_Fulfillment
+  usecase "Place Order" as UC_Order
+  usecase "View Order History" as UC_History
+  usecase "Track Order" as UC_Track
+  usecase "Reschedule Order" as UC_Reschedule
+  usecase "Cancel Order" as UC_Cancel
+  usecase "View Notifications" as UC_Notifications
+  usecase "View Promotions" as UC_Promotions
+  usecase "View Saved Designs" as UC_Designs
+  usecase "View Print Guidelines" as UC_Guidelines
+  usecase "View FAQ" as UC_FAQ
+  usecase "Logout" as UC_Logout
+}
+
+Customer -- UC_Register
+Customer -- UC_Login
+Customer -- UC_Profile
+Customer -- UC_Address
+Customer -- UC_Categories
+Customer -- UC_Products
+Customer -- UC_Details
+Customer -- UC_Customize
+Customer -- UC_Artwork
+Customer -- UC_Text
+Customer -- UC_Fulfillment
+Customer -- UC_Order
+Customer -- UC_History
+Customer -- UC_Track
+Customer -- UC_Reschedule
+Customer -- UC_Cancel
+Customer -- UC_Notifications
+Customer -- UC_Promotions
+Customer -- UC_Designs
+Customer -- UC_Guidelines
+Customer -- UC_FAQ
+Customer -- UC_Logout
+
+note right of UC_Reschedule
+Allowed only while status is Processing.
+end note
+note right of UC_Cancel
+Allowed only while status is Processing.
+end note
+@enduml

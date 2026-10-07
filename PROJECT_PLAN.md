@@ -21,29 +21,33 @@ The existing reference PDF, DOCX, and ZIP in the workspace are source material o
 
 **Categories:** Business Cards, Flyers, Posters, Banners, Stickers, T-Shirts, and Mugs.
 
-The first implementation may use local sample catalogue content and local order status changes. It must not imply that a print shop or delivery service is connected.
+The first implementation may use local sample catalogue content and local order status changes. Promotions are informational and display-only: promotions.discount is a percentage value (10.0 means 10%), and no promotion discount is applied to checkout totals. It must not imply that a print shop or delivery service is connected.
 
 ## Screen and navigation plan
 
-1. Splash
-2. Login
-3. Register
-4. Home
-5. Product Categories
-6. Product List
-7. Product Details
-8. Customize Print
-9. Artwork Selection
-10. Order Summary
-11. Pickup / Delivery
-12. My Orders
-13. Order Details / Tracking
-14. Notifications / Offers
-15. Profile
+1. Splash Screen
+2. Login Screen
+3. Register Screen
+4. Home Screen
+5. Product Categories Screen
+6. Product List Screen
+7. Product Details Screen
+8. Customize Print Screen
+9. Artwork Selection Screen
+10. Order Summary Screen
+11. Pickup / Delivery Screen
+12. Order Confirmation Screen
+13. My Orders Screen
+14. Order Details / Tracking Screen
+15. Notifications / Offers Screen
+16. Profile Screen
+17. Manage Addresses Screen
+18. Saved Designs Screen
+19. Print Guidelines / FAQ Screen
 
-Navigation: Splash → Login/Register → Home → Categories → Product List → Product Details → Customize Print → Artwork/Custom Text → Order Summary → Pickup/Delivery → Confirm Order → My Orders → Order Details/Tracking.
+Navigation: Splash → Login/Register → Home → Product Categories → Product List → Product Details → Customize Print → Artwork Selection (when needed) → Order Summary → Pickup / Delivery → Order Confirmation → My Orders → Order Details / Tracking.
 
-Saved designs, print guidelines, FAQ/support, address management, and logout may be sections within these screens. Activities and fragments will be chosen for the simplest reliable navigation once the Android project scaffold is in place.
+Home, My Orders, Notifications / Offers and Profile are the four main bottom-navigation destinations. Profile links to Manage Addresses, Saved Designs and Print Guidelines / FAQ; logout returns to Login. See docs/task-c/screen-specifications.md for the nineteen planned destinations. Activities and fragments will be chosen for reliable navigation after the Android project scaffold is created.
 
 ## Database plan
 
@@ -63,13 +67,13 @@ Use a local SQLite database named **PrintXpressDB**. Enable foreign keys, use in
 | notifications | notification_id, user_id, title, message, created_at, is_read | user_id → users |
 | promotions | promotion_id, title, description, discount, start_date, end_date | Independent offer records |
 
-The orders.scheduled_for TEXT field records the customer's current selected pickup or delivery date/time. The nullable orders.rescheduled_at TEXT field records the most recent rescheduling action. Both values will use one documented timestamp format. The planned statuses are Processing, Printing, Ready for Pickup, Out for Delivery, Completed, and Cancelled. The customer may cancel or reschedule **only** when status is Processing; all five other statuses reject both actions.
+The orders.scheduled_for TEXT NOT NULL field records the customer's current selected pickup or delivery date/time. The nullable orders.rescheduled_at TEXT field records when the most recent rescheduling action occurred. Store both as ISO 8601 UTC text (yyyy-MM-ddTHH:mm:ssZ); convert a customer-selected Sri Lankan local time to UTC for storage and back for display. Rescheduling replaces scheduled_for with the newly selected time and updates rescheduled_at. The planned statuses are Processing, Printing, Ready for Pickup, Out for Delivery, Completed, and Cancelled. The customer may cancel or reschedule **only** when status is Processing; all five other statuses reject both actions.
 
 Product choices are rows in product_options: option_id INTEGER PRIMARY KEY AUTOINCREMENT, product_id INTEGER NOT NULL, option_type TEXT NOT NULL, option_value TEXT NOT NULL, and price_adjustment REAL NOT NULL DEFAULT 0, with a foreign key to products. Example types are Size, Material, Print Side, Finish, Colour, and Paper Type; example values include A4, A3, Matte, Glossy, Front Only, and Front and Back.
 
-Selected choices are rows in order_item_options: order_item_option_id INTEGER PRIMARY KEY AUTOINCREMENT, order_item_id INTEGER NOT NULL, option_id INTEGER NOT NULL, and price_adjustment REAL NOT NULL DEFAULT 0, with foreign keys to order_items and product_options. Its adjustment is a checkout-time price snapshot. order_items has no fixed size or material columns; it holds order_item_id INTEGER PRIMARY KEY AUTOINCREMENT, order_id INTEGER NOT NULL, product_id INTEGER NOT NULL, quantity INTEGER NOT NULL, custom_text TEXT, artwork_path TEXT, unit_price REAL NOT NULL, and subtotal REAL NOT NULL, with foreign keys to orders and products.
+Selected choices are rows in order_item_options: order_item_option_id INTEGER PRIMARY KEY AUTOINCREMENT, order_item_id INTEGER NOT NULL, option_id INTEGER NOT NULL, and price_adjustment REAL NOT NULL DEFAULT 0, with foreign keys to order_items and product_options. Its adjustment is a checkout-time price snapshot. DatabaseHelper/application logic must verify that each selected product_options.product_id equals the related order_items.product_id before saving; foreign keys alone do not enforce this. order_items has no fixed size or material columns; it holds order_item_id INTEGER PRIMARY KEY AUTOINCREMENT, order_id INTEGER NOT NULL, product_id INTEGER NOT NULL, quantity INTEGER NOT NULL, custom_text TEXT, artwork_path TEXT, unit_price REAL NOT NULL, and subtotal REAL NOT NULL, with foreign keys to orders and products.
 
-Keep a delivery address snapshot in orders so history remains understandable after profile edits. Database operations will cover account lookup/create/update, address CRUD, catalogue and option reads, saved design CRUD, order creation in a transaction, order/history/status reads, permitted order updates, notifications, and promotions. Passwords must never be stored as plain text even though the required column is named password; the exact student-friendly hashing approach will be documented before implementation. See docs/database/database-design.md, schema.md, and normalization.md.
+Currency is Sri Lankan Rupees (LKR). Monetary database columns remain REAL for this academic project, but Java price calculations must use BigDecimal, never direct floating-point totals. Round unit prices, item subtotals, option adjustments, and order totals to exactly two decimal places before SQLite persistence and UI display. Keep a delivery address snapshot in orders so history remains understandable after profile edits. Database operations will cover account lookup/create/update, address CRUD, catalogue and option reads, saved design CRUD, order creation in a transaction, order/history/status reads, permitted order updates, notifications, and promotions. Passwords must never be stored as plain text even though the required column is named password; the exact student-friendly hashing approach will be documented before implementation. See docs/database/database-design.md, schema.md, and normalization.md.
 
 ## Validation and business rules
 - Require a name, valid email and phone number, a suitable password, and matching confirmation.
@@ -80,7 +84,7 @@ Keep a delivery address snapshot in orders so history remains understandable aft
 - Calculate the order total from item data and save order and item rows together.
 - Permit cancellation or rescheduling only when status is Processing; reject both actions for Printing, Ready for Pickup, Out for Delivery, Completed, and Cancelled.
 
-Exact input limits and price rules will be set during implementation and recorded in the technical documentation.
+Exact input limits and the detailed pricing formula will be recorded during implementation; the approved LKR BigDecimal/two-decimal policy applies throughout.
 
 ## Proposed initial Android project structure
 

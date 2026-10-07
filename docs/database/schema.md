@@ -85,12 +85,12 @@ The type and nullability choices below are proposed for implementation. PK means
 | order_date | TEXT NOT NULL | |
 | order_type | TEXT NOT NULL; Pickup or Home Delivery | |
 | delivery_address | TEXT; required by app for Home Delivery | |
-| scheduled_for | TEXT; required by app at checkout | |
+| scheduled_for | TEXT NOT NULL | |
 | rescheduled_at | TEXT NULL | |
 | total_amount | REAL NOT NULL | |
 | status | TEXT NOT NULL; initial value Processing | |
 
-**Relationships:** Many orders belong to one user. One order has one or more order_items. Customer cancellation/rescheduling is allowed only in Processing status. Other statuses: Printing, Ready for Pickup, Out for Delivery, Completed, Cancelled.
+**Relationships:** Many orders belong to one user. One order has one or more order_items. Customer cancellation/rescheduling is allowed only in Processing status. Other statuses: Printing, Ready for Pickup, Out for Delivery, Completed, Cancelled. scheduled_for is updated to the newly selected time on rescheduling; nullable rescheduled_at records when the most recent action happened. Store both in ISO 8601 UTC text (yyyy-MM-ddTHH:mm:ssZ) and convert selected Sri Lankan local times at the UI boundary.
 
 ## order_items
 
@@ -120,7 +120,7 @@ The type and nullability choices below are proposed for implementation. PK means
 | option_id | INTEGER NOT NULL | FK → product_options.option_id |
 | price_adjustment | REAL NOT NULL DEFAULT 0 | |
 
-**Relationships:** Each row belongs to one order item and one catalogue option. A unique pair of order_item_id + option_id is proposed to prevent recording an identical choice twice. The application must verify that the option belongs to the order item's product.
+**Relationships:** Each row belongs to one order item and one catalogue option. A unique pair of order_item_id + option_id is proposed to prevent recording an identical choice twice. Application/DatabaseHelper logic must verify that product_options.product_id matches the related order_items.product_id before saving; the two foreign keys do not enforce this cross-table equality.
 
 ## saved_designs
 
@@ -152,18 +152,18 @@ The type and nullability choices below are proposed for implementation. PK means
 
 ## promotions
 
-**Purpose:** Stores offers displayed to customers.
+**Purpose:** Stores informational offers displayed to customers. The discount value is a percentage, not a money amount.
 
 | Column | Proposed type / constraint | Key |
 | --- | --- | --- |
 | promotion_id | INTEGER PRIMARY KEY AUTOINCREMENT | PK |
 | title | TEXT NOT NULL | |
 | description | TEXT | |
-| discount | REAL NOT NULL | |
+| discount | REAL NOT NULL; percentage value (10.0 means 10%) | |
 | start_date | TEXT NOT NULL | |
 | end_date | TEXT NOT NULL | |
 
-**Relationships:** Independent catalogue content; it currently has no FK to orders or products. Whether discount means percent or fixed Sri Lankan rupees must be decided before redemption logic is added.
+**Relationships:** Independent catalogue content with no FK to orders or products. Promotions are display-only in this version; their percentage values do not alter checkout calculations.
 
 ## Relationship summary
 
@@ -175,4 +175,4 @@ The type and nullability choices below are proposed for implementation. PK means
 - product_options 1 → many order_item_options
 - promotions is independent
 
-The order_items ↔ product_options many-to-many selection is resolved by order_item_options. Do not delete referenced catalogue choices or products without an explicit history-preserving policy.
+The order_items ↔ product_options many-to-many selection is resolved by order_item_options. Do not delete referenced catalogue choices or products without an explicit history-preserving policy. Monetary values are in Sri Lankan Rupees (LKR). REAL columns remain for the academic schema, but Java calculations must use BigDecimal and HALF_UP rounding to two decimal places before database persistence and UI display; totals must not be calculated directly with floating-point arithmetic.

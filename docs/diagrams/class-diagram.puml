@@ -1,5 +1,7 @@
 @startuml
+title PrintXpress - Planned domain class diagram
 skinparam classAttributeIconSize 0
+skinparam linetype ortho
 
 package "Domain models" {
   class User {
@@ -7,7 +9,7 @@ package "Domain models" {
     +fullName: String
     +email: String
     +phone: String
-    +passwordHash: String
+    +password: String
   }
   class Address {
     +addressId: long
@@ -26,7 +28,7 @@ package "Domain models" {
     +categoryId: long
     +productName: String
     +description: String
-    +basePrice: double
+    +basePrice: BigDecimal
     +imageName: String
   }
   class ProductOption {
@@ -34,7 +36,7 @@ package "Domain models" {
     +productId: long
     +optionType: String
     +optionValue: String
-    +priceAdjustment: double
+    +priceAdjustment: BigDecimal
   }
   class Order {
     +orderId: long
@@ -44,7 +46,7 @@ package "Domain models" {
     +deliveryAddress: String
     +scheduledFor: String
     +rescheduledAt: String
-    +totalAmount: double
+    +totalAmount: BigDecimal
     +status: String
   }
   class OrderItem {
@@ -54,14 +56,14 @@ package "Domain models" {
     +quantity: int
     +customText: String
     +artworkPath: String
-    +unitPrice: double
-    +subtotal: double
+    +unitPrice: BigDecimal
+    +subtotal: BigDecimal
   }
   class OrderItemOption {
     +orderItemOptionId: long
     +orderItemId: long
     +optionId: long
-    +priceAdjustment: double
+    +priceAdjustment: BigDecimal
   }
   class SavedDesign {
     +designId: long
@@ -81,7 +83,7 @@ package "Domain models" {
     +promotionId: long
     +title: String
     +description: String
-    +discount: double
+    +discount: BigDecimal
     +startDate: String
     +endDate: String
   }
@@ -89,27 +91,38 @@ package "Domain models" {
 
 package "Persistence" {
   class DatabaseHelper {
-    +createUser(user: User): long
-    +getProductsByCategory(categoryId: long): List
+    +createTables(): void
+    +registerUser(user: User): long
+    +authenticateUser(email: String, password: String): User
+    +getProducts(): List
     +createOrder(order: Order, items: List): long
-    +getOrdersForUser(userId: long): List
-    +updateOrderSchedule(orderId: long, scheduledFor: String): boolean
-    +cancelProcessingOrder(orderId: long): boolean
+    +getUserOrders(userId: long): List
+    +updateOrderStatus(orderId: long, status: String): boolean
+    +cancelOrder(orderId: long): boolean
+    +rescheduleOrder(orderId: long, scheduledFor: String): boolean
   }
 }
 
-User "1" -- "0..*" Address
-User "1" -- "0..*" Order
-User "1" -- "0..*" SavedDesign
-User "1" -- "0..*" Notification
-Category "1" -- "0..*" Product
-Product "1" -- "0..*" ProductOption
-Product "1" -- "0..*" OrderItem
-Order "1" -- "1..*" OrderItem
-OrderItem "1" -- "0..*" OrderItemOption
-ProductOption "1" -- "0..*" OrderItemOption
+User "1" -- "0..*" Address : owns
+User "1" -- "0..*" Order : places
+User "1" -- "0..*" SavedDesign : saves
+User "1" -- "0..*" Notification : receives
+Category "1" -- "0..*" Product : groups
+Product "1" -- "0..*" ProductOption : offers
+Product "1" -- "0..*" OrderItem : appears in
+Order "1" -- "1..*" OrderItem : contains
+OrderItem "1" -- "0..*" OrderItemOption : selects
+ProductOption "1" -- "0..*" OrderItemOption : chosen as
 DatabaseHelper ..> User
 DatabaseHelper ..> Product
 DatabaseHelper ..> Order
-DatabaseHelper ..> Promotion
+
+note right of User
+password holds a hash, never plain text.
+end note
+note right of DatabaseHelper
+Planned responsibilities include foreign-key setup,
+transactional order save, option-product matching,
+and Processing-only customer order changes.
+end note
 @enduml

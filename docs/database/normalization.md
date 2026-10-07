@@ -1,59 +1,134 @@
 # PrintXpress Database Normalization
 
-**Status:** Original Task B design explanation. This is a proposed schema, not evidence of an implemented database.
+**Status:** Task B design explanation for a proposed SQLite database. The example is hypothetical; no application database has been implemented.
 
-## Unnormalized order record
+## Worked example: unnormalized form (UNF)
 
-Imagine one PrintXpress order form stored as a single record:
+Suppose order 42 belongs to customer 7 and contains 100 Business Cards and two Posters. A single order-form record might have OrderID, CustomerID, CustomerName, CustomerEmail, CustomerPhone, DeliveryAddress, OrderTotal, and a repeating collection of products. Each product entry holds ProductID, ProductName, CategoryName, Quantity, UnitPrice, Subtotal, and SelectedOptions. The business cards might contain [Size: Standard, Finish: Matte]; the posters might contain [Size: A3, Material: Glossy].
 
-    Order 42; customer: N. Perera, n@example.com; delivery: Colombo;
-    item 1: 100 Business Cards, [Size=Standard, Finish=Matte], artwork URI;
-    item 2: 2 Posters, [Size=A3, Material=Glossy], custom text;
-    status: Processing
-
-The item list and each item's option list are repeating groups. A single cell containing several items or comma-separated choices is hard to query and update. Customer contact data, product descriptions, and category names would also be copied into every order form.
+This is unnormalized because product entries repeat inside one order record and SelectedOptions holds several values. Searching for all A3 orders or changing a category name becomes unreliable when values are embedded in lists. Repeating customer and product descriptions across orders also creates update anomalies.
 
 ## First Normal Form (1NF)
 
-Give each stored value one meaning and separate repeating groups into rows. For illustration, an early flat selection table could have one row per option chosen for an order line, identified by (order_id, line_number, option_number). It would contain order date, customer details, product details, item quantity, option type/value, and prices as separate columns.
+Make every value atomic and give each row a key. For this illustration, flatten the order into one row per selected option, with composite key (order_id, line_no, option_no). An option is split into option_type and option_value rather than stored as a comma-separated list. Product IDs 101 and 202 below are hypothetical.
 
-This removes comma-separated items and options, but repeats order and item facts across several option rows. A product with two selected options creates two rows for its one ordered item. Use a stable order_item_id in the eventual schema so two lines for the same product remain distinct.
+| order_id | line_no | option_no | product_id | option_type | option_value |
+| --- | --- | --- | --- | --- | --- |
+| 42 | 1 | 1 | 101 | Size | Standard |
+| 42 | 1 | 2 | 101 | Finish | Matte |
+| 42 | 2 | 1 | 202 | Size | A3 |
+| 42 | 2 | 2 | 202 | Material | Glossy |
+
+The omitted order, customer, item-price and product-description columns would still repeat across these rows. The example items each have options; in the final schema an item with no selected options has zero order_item_options rows. line_no distinguishes two lines for the same product. The final design uses order_item_id and order_item_option_id instead of these illustrative line and option numbers.
 
 ## Second Normal Form (2NF)
 
-In the illustrative 1NF key (order_id, line_number, option_number):
+In that 1NF composite key, order_date, customer_id, delivery choice and OrderTotal depend only on order_id. ProductID, Quantity, custom content, UnitPrice and Subtotal depend on (order_id, line_no). The chosen option depends on the whole selection key. These partial dependencies mean the flat table is not in 2NF.
 
-- order_date, user_id, status, and delivery choice depend on order_id alone;
-- product_id, quantity, custom text, and artwork depend on (order_id, line_number);
-- the selected option depends on the whole selection key.
-
-Move order facts to orders, item facts to order_items, and chosen option facts to order_item_options. Each new table has a primary key; its non-key facts describe that row's entity. Customer addresses and saved designs are separate reusable records rather than repeated order-line fields.
+Separate the order header into orders, ordered lines into order_items, and selections into order_item_options. Product descriptions and base prices are moved to products, while customer name, email and phone are moved to users; they must not be copied into each selection row. The order item retains transactional quantity, custom text, artwork reference, agreed unit price and subtotal. This decomposition also prepares the further transitive-dependency checks in 3NF.
 
 ## Third Normal Form (3NF)
 
-Remove facts that depend on other non-key facts:
+A non-key field must not determine another non-key field in its table. For example, if CategoryName were kept in products, product_id would lead through category_id to CategoryName. Put CategoryName in categories and retain category_id as a foreign key in products. If an option's type, value and current price adjustment were copied into order_item_options, option_id would determine those catalogue facts. Store them once in product_options and retain option_id in the selected-option table.
 
-- user_id determines a user's name, email, phone, and password hash, so those belong in users rather than orders;
-- category_id determines category_name, so category data belongs in categories rather than products;
-- product_id determines product name, description, base price, and category link, so these belong in products rather than order_items;
-- option_id determines its product, type, value, and current catalogue adjustment, so these belong in product_options rather than being repeated as free text for every order item.
+A user can have several reusable addresses, so addresses is a separate table linked to users rather than multiple address columns in users. saved_designs and notifications also depend on their own identifiers and link to users. promotions is independent. Order delivery_address deliberately records the address used at checkout; changing a saved address must not rewrite historical orders. Similarly, unit_price, subtotal, total_amount and the selected price_adjustment are controlled order-time price snapshots. These are intentional historical redundancies, so the final design should not be presented as perfectly redundancy-free 3NF.
 
-addresses, saved_designs, and notifications each depend on their own primary key and reference users. promotions is independent. Foreign keys represent the relationships without duplicating the parent record's descriptive fields.
+## Final normalized relational schema
 
-## Final relational schema
+Uppercase table labels below are presentation style; the proposed SQLite identifiers in schema.md use lowercase. PK means primary key, FK means foreign key. NOT NULL and UNIQUE are shown only where already specified in schema.md; proposed composite uniqueness rules are not added here.
 
-- users(user_id PK, full_name, email, phone, password)
-- addresses(address_id PK, user_id FK, address_line, city, district, postal_code)
-- categories(category_id PK, category_name)
-- products(product_id PK, category_id FK, product_name, description, base_price, image_name)
-- product_options(option_id PK, product_id FK, option_type, option_value, price_adjustment)
-- orders(order_id PK, user_id FK, order_date, order_type, delivery_address, scheduled_for, rescheduled_at, total_amount, status)
-- order_items(order_item_id PK, order_id FK, product_id FK, quantity, custom_text, artwork_path, unit_price, subtotal)
-- order_item_options(order_item_option_id PK, order_item_id FK, option_id FK, price_adjustment)
-- saved_designs(design_id PK, user_id FK, design_name, file_path)
-- notifications(notification_id PK, user_id FK, title, message, created_at, is_read)
-- promotions(promotion_id PK, title, description, discount, start_date, end_date)
+    USERS(
+      user_id PK,
+      full_name NOT NULL,
+      email NOT NULL UNIQUE,
+      phone NOT NULL,
+      password NOT NULL
+    )
 
-The master data and relationship tables avoid repeating groups and partial/transitive dependencies. A few order fields are deliberate historical snapshots rather than a claim of perfect mathematical 3NF: orders.delivery_address preserves the address used at checkout; order_items.unit_price and order_item_options.price_adjustment preserve agreed prices; item subtotal and order total preserve displayed totals. Store and update these values together in one transaction, then test that they remain consistent. The selected options are normalized through order_item_options; there are no fixed size or material columns in order_items.
+    ADDRESSES(
+      address_id PK,
+      user_id NOT NULL FK → USERS.user_id,
+      address_line NOT NULL,
+      city NOT NULL,
+      district NOT NULL,
+      postal_code
+    )
 
-See schema.md for field types and all foreign keys.
+    CATEGORIES(
+      category_id PK,
+      category_name NOT NULL UNIQUE
+    )
+
+    PRODUCTS(
+      product_id PK,
+      category_id NOT NULL FK → CATEGORIES.category_id,
+      product_name NOT NULL,
+      description,
+      base_price NOT NULL,
+      image_name
+    )
+
+    PRODUCT_OPTIONS(
+      option_id PK,
+      product_id NOT NULL FK → PRODUCTS.product_id,
+      option_type NOT NULL,
+      option_value NOT NULL,
+      price_adjustment NOT NULL DEFAULT 0
+    )
+
+    ORDERS(
+      order_id PK,
+      user_id NOT NULL FK → USERS.user_id,
+      order_date NOT NULL,
+      order_type NOT NULL,
+      delivery_address,
+      scheduled_for NOT NULL,
+      rescheduled_at NULL,
+      total_amount NOT NULL,
+      status NOT NULL
+    )
+
+    ORDER_ITEMS(
+      order_item_id PK,
+      order_id NOT NULL FK → ORDERS.order_id,
+      product_id NOT NULL FK → PRODUCTS.product_id,
+      quantity NOT NULL,
+      custom_text,
+      artwork_path,
+      unit_price NOT NULL,
+      subtotal NOT NULL
+    )
+
+    ORDER_ITEM_OPTIONS(
+      order_item_option_id PK,
+      order_item_id NOT NULL FK → ORDER_ITEMS.order_item_id,
+      option_id NOT NULL FK → PRODUCT_OPTIONS.option_id,
+      price_adjustment NOT NULL DEFAULT 0
+    )
+
+    SAVED_DESIGNS(
+      design_id PK,
+      user_id NOT NULL FK → USERS.user_id,
+      design_name NOT NULL,
+      file_path NOT NULL
+    )
+
+    NOTIFICATIONS(
+      notification_id PK,
+      user_id NOT NULL FK → USERS.user_id,
+      title NOT NULL,
+      message NOT NULL,
+      created_at NOT NULL,
+      is_read NOT NULL DEFAULT 0
+    )
+
+    PROMOTIONS(
+      promotion_id PK,
+      title NOT NULL,
+      description,
+      discount NOT NULL,
+      start_date NOT NULL,
+      end_date NOT NULL
+    )
+
+Every order must be created with at least one order item in one transaction; a foreign key alone cannot enforce that minimum. Application/DatabaseHelper logic must also verify that each selected product_options.product_id equals its order_items.product_id. Customer cancellation and rescheduling are permitted only while status is Processing. scheduled_for is mandatory, while rescheduled_at remains nullable and records the most recent reschedule action. Monetary values are LKR; Java will calculate with BigDecimal and round to two decimal places before writing the approved SQLite REAL fields or displaying values.

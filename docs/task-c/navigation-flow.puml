@@ -1,0 +1,75 @@
+@startuml
+title PrintXpress - Planned UI navigation flow
+skinparam linetype ortho
+
+state "Splash" as Splash
+state "Login" as Login
+state "Register" as Register
+state "Home" as Home
+state "Product Categories" as Categories
+state "Product List" as Products
+state "Product Details" as Details
+state "Customize Print" as Customize
+state "Artwork Selection" as Artwork
+state "Order Summary" as Summary
+state "Pickup / Delivery" as Fulfillment
+state "Order Confirmation" as Confirmation
+state "My Orders" as Orders
+state "Order Details / Tracking" as Tracking
+state "Notifications / Offers" as Notices
+state "Profile" as Profile
+state "Manage Addresses" as Addresses
+state "Saved Designs" as Designs
+state "Print Guidelines / FAQ" as Info
+
+[*] --> Splash
+Splash --> Login : no active session
+Splash --> Home : valid existing session
+Login --> Register : create account
+Register --> Login : registration succeeds
+Login --> Home : login succeeds
+
+Home --> Categories : browse categories
+Home --> Products : local search
+Home --> Details : featured product
+Categories --> Products : choose category
+Products --> Details : choose product
+Details --> Customize : customize
+Customize --> Artwork : choose artwork
+Artwork --> Customize : return with selection
+Customize --> Summary : continue
+Summary --> Customize : edit choices
+Summary --> Fulfillment : confirm summary
+Fulfillment --> Addresses : add address\nif needed
+Addresses --> Fulfillment : return with address
+Fulfillment --> Confirmation : order saved successfully
+Confirmation --> Orders : view order
+Confirmation --> Home : back to home
+Orders --> Tracking : view details
+Tracking --> Orders : back
+
+Home --> Orders : bottom tab
+Home --> Notices : bottom tab
+Home --> Profile : bottom tab
+Orders --> Home : bottom tab
+Notices --> Home : bottom tab
+Profile --> Home : bottom tab
+
+Home --> Info : print guidelines shortcut
+Profile --> Addresses : manage addresses
+Profile --> Designs : saved designs
+Profile --> Info : guidelines / FAQ
+Profile --> Login : logout
+
+note right of Home
+Main bottom navigation has four destinations:
+Home, Orders, Notifications, Profile.
+Any main tab can switch to another.
+Sample designs appear within Home content.
+end note
+
+note bottom of Fulfillment
+Pickup needs no address.
+Home Delivery requires an address and schedule.
+end note
+@enduml

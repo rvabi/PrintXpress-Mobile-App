@@ -2,24 +2,33 @@
 title PrintXpress - Customer registration
 
 start
-:Open Register screen;
-:Enter full name, email, phone,\npassword, and confirmation;
-if (All input valid?) then (yes)
-  :Look up email in local SQLite database;
-  if (Email already registered?) then (yes)
-    :Show duplicate-email error;
-    stop
+:Open Registration screen;
+repeat
+  :Enter name, email, phone,\npassword and confirmation;
+  :Validate required fields;
+  :Validate email format;
+  :Validate phone number;
+  :Validate password requirements;
+  :Check password confirmation;
+  if (Any field invalid?) then (yes)
+    :Show field-specific errors\nand allow correction;
   else (no)
-    :Hash password;
-    :Insert user record;
-    if (Insert succeeded?) then (yes)
-      :Show success and continue to login/home;
+    :Check whether email already exists;
+    if (Email already registered?) then (yes)
+      :Show duplicate-email error\nand allow correction;
     else (no)
-      :Show registration failure;
+      :Mark form ready;
     endif
   endif
+repeat while (Form not ready?) is (yes) not (no)
+
+:Hash password;
+:Save user in SQLite;
+if (Save succeeded?) then (yes)
+  :Show registration success;
+  :Navigate to Login screen;
 else (no)
-  :Show field-specific errors;
+  :Show save failure;
 endif
 stop
 @enduml

@@ -1,61 +1,85 @@
 @startuml
+title PrintXpress - Customer use cases
 left to right direction
 skinparam packageStyle rectangle
+skinparam linetype ortho
 
 actor Customer
 
 rectangle "PrintXpress Mobile Application" {
-  usecase "Register" as UC_Register
-  usecase "Login" as UC_Login
-  usecase "Manage Profile" as UC_Profile
-  usecase "Manage Address" as UC_Address
-  usecase "Browse Categories" as UC_Categories
-  usecase "Browse Products" as UC_Products
-  usecase "View Product Details" as UC_Details
-  usecase "Customize Product" as UC_Customize
-  usecase "Upload Artwork" as UC_Artwork
-  usecase "Enter Custom Text" as UC_Text
-  usecase "Select Pickup or Delivery" as UC_Fulfillment
-  usecase "Place Order" as UC_Order
-  usecase "View Order History" as UC_History
-  usecase "Track Order" as UC_Track
-  usecase "Reschedule Order" as UC_Reschedule
-  usecase "Cancel Order" as UC_Cancel
-  usecase "View Notifications" as UC_Notifications
-  usecase "View Promotions" as UC_Promotions
-  usecase "View Saved Designs" as UC_Designs
-  usecase "View Print Guidelines" as UC_Guidelines
-  usecase "View FAQ" as UC_FAQ
-  usecase "Logout" as UC_Logout
+  package "Account" {
+    usecase "Register" as UC_Register
+    usecase "Login" as UC_Login
+    usecase "Logout" as UC_Logout
+    usecase "Manage Profile" as UC_Profile
+    usecase "Manage Delivery Address" as UC_Address
+  }
+
+  package "Products and designs" {
+    usecase "Browse Categories" as UC_Categories
+    usecase "Browse Products" as UC_Products
+    usecase "View Product Details" as UC_Details
+    usecase "Customize Product" as UC_Customize
+    usecase "Select Product Options" as UC_Options
+    usecase "Upload Artwork" as UC_Artwork
+    usecase "Enter Custom Text" as UC_Text
+    usecase "View Sample Designs" as UC_Samples
+    usecase "View Saved Designs" as UC_Designs
+  }
+
+  package "Orders" {
+    usecase "Place Order" as UC_Order
+    usecase "Review Order Summary" as UC_Summary
+    usecase "Select Pickup or\nHome Delivery" as UC_Fulfillment
+    usecase "View Order History" as UC_History
+    usecase "Track Order" as UC_Track
+    usecase "Reschedule Order" as UC_Reschedule
+    usecase "Cancel Order" as UC_Cancel
+  }
+
+  package "Information" {
+    usecase "View Notifications" as UC_Notifications
+    usecase "View Promotions" as UC_Promotions
+    usecase "View Print Guidelines" as UC_Guidelines
+    usecase "View FAQ / Support" as UC_FAQ
+  }
 }
 
 Customer -- UC_Register
 Customer -- UC_Login
+Customer -- UC_Logout
 Customer -- UC_Profile
 Customer -- UC_Address
 Customer -- UC_Categories
 Customer -- UC_Products
 Customer -- UC_Details
 Customer -- UC_Customize
-Customer -- UC_Artwork
-Customer -- UC_Text
-Customer -- UC_Fulfillment
+Customer -- UC_Samples
+Customer -- UC_Designs
 Customer -- UC_Order
 Customer -- UC_History
 Customer -- UC_Track
-Customer -- UC_Reschedule
-Customer -- UC_Cancel
 Customer -- UC_Notifications
 Customer -- UC_Promotions
-Customer -- UC_Designs
 Customer -- UC_Guidelines
 Customer -- UC_FAQ
-Customer -- UC_Logout
 
-note right of UC_Reschedule
-Allowed only while status is Processing.
+UC_Customize ..> UC_Options : <<include>>
+UC_Artwork ..> UC_Customize : <<extend>>
+UC_Text ..> UC_Customize : <<extend>>
+UC_Order ..> UC_Customize : <<include>>
+UC_Order ..> UC_Summary : <<include>>
+UC_Order ..> UC_Fulfillment : <<include>>
+UC_Reschedule ..> UC_Track : <<extend>>
+UC_Cancel ..> UC_Track : <<extend>>
+
+note right of UC_Customize
+Artwork and custom text are conditional choices.
+Neither is mandatory for every product.
 end note
-note right of UC_Cancel
-Allowed only while status is Processing.
+
+note right of UC_Track
+Reschedule and cancel are available only
+when the current status is Processing.
 end note
 @enduml

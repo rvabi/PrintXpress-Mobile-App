@@ -1,0 +1,51 @@
+@startuml
+title PrintXpress - Manage an existing order
+
+start
+:Open My Orders;
+:Select an order;
+:View order details and current status;
+if (Status is Processing?) then (yes)
+  :Choose Reschedule, Cancel, or No change;
+  if (Reschedule?) then (yes)
+    repeat
+      :Select new pickup/delivery date and time;
+      :Validate new date and time;
+      if (Invalid?) then (yes)
+        :Show error and allow correction;
+      else (no)
+        :Mark new schedule ready;
+      endif
+    repeat while (Schedule not ready?) is (yes) not (no)
+    :Recheck current status;
+    if (Still Processing?) then (yes)
+      :Update scheduled_for;
+      :Set rescheduled_at to current timestamp;
+      :Show rescheduling success;
+    else (no)
+      :Reject change and show current status;
+    endif
+  else (no)
+    if (Cancel?) then (yes)
+      :Ask for cancellation confirmation;
+      if (Confirmed?) then (yes)
+        :Recheck current status;
+        if (Still Processing?) then (yes)
+          :Update status to Cancelled;
+          :Show cancellation success;
+        else (no)
+          :Reject change and show current status;
+        endif
+      else (no)
+        :Keep order unchanged;
+      endif
+    else (no change)
+      :Keep order unchanged;
+    endif
+  endif
+else (no)
+  :Disable or reject cancel and reschedule;
+  :Allow tracking/details view only;
+endif
+stop
+@enduml

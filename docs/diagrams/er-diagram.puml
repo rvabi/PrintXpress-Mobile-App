@@ -1,115 +1,119 @@
 @startuml
-title PrintXpressDB - Entity Relationship Diagram
+title PrintXpressDB - Proposed ER diagram
 hide circle
 skinparam linetype ortho
 
 entity "users" as users {
   * user_id : INTEGER <<PK>>
   --
-  full_name : TEXT
-  email : TEXT
-  phone : TEXT
-  password : TEXT
+  full_name : TEXT NOT NULL
+  email : TEXT NOT NULL UNIQUE
+  phone : TEXT NOT NULL
+  password : TEXT NOT NULL
 }
 entity "addresses" as addresses {
   * address_id : INTEGER <<PK>>
   --
-  user_id : INTEGER <<FK>>
-  address_line : TEXT
-  city : TEXT
-  district : TEXT
+  user_id : INTEGER NOT NULL <<FK>>
+  address_line : TEXT NOT NULL
+  city : TEXT NOT NULL
+  district : TEXT NOT NULL
   postal_code : TEXT
 }
 entity "categories" as categories {
   * category_id : INTEGER <<PK>>
   --
-  category_name : TEXT
+  category_name : TEXT NOT NULL UNIQUE
 }
 entity "products" as products {
   * product_id : INTEGER <<PK>>
   --
-  category_id : INTEGER <<FK>>
-  product_name : TEXT
+  category_id : INTEGER NOT NULL <<FK>>
+  product_name : TEXT NOT NULL
   description : TEXT
-  base_price : REAL
+  base_price : REAL NOT NULL
   image_name : TEXT
 }
 entity "product_options" as product_options {
   * option_id : INTEGER <<PK>>
   --
-  product_id : INTEGER <<FK>>
-  option_type : TEXT
-  option_value : TEXT
-  price_adjustment : REAL
+  product_id : INTEGER NOT NULL <<FK>>
+  option_type : TEXT NOT NULL
+  option_value : TEXT NOT NULL
+  price_adjustment : REAL NOT NULL DEFAULT 0
 }
 entity "orders" as orders {
   * order_id : INTEGER <<PK>>
   --
-  user_id : INTEGER <<FK>>
-  order_date : TEXT
-  order_type : TEXT
+  user_id : INTEGER NOT NULL <<FK>>
+  order_date : TEXT NOT NULL
+  order_type : TEXT NOT NULL
   delivery_address : TEXT
-  scheduled_for : TEXT
-  rescheduled_at : TEXT
-  total_amount : REAL
-  status : TEXT
+  scheduled_for : TEXT NOT NULL
+  rescheduled_at : TEXT NULL
+  total_amount : REAL NOT NULL
+  status : TEXT NOT NULL
 }
 entity "order_items" as order_items {
   * order_item_id : INTEGER <<PK>>
   --
-  order_id : INTEGER <<FK>>
-  product_id : INTEGER <<FK>>
-  quantity : INTEGER
+  order_id : INTEGER NOT NULL <<FK>>
+  product_id : INTEGER NOT NULL <<FK>>
+  quantity : INTEGER NOT NULL
   custom_text : TEXT
   artwork_path : TEXT
-  unit_price : REAL
-  subtotal : REAL
+  unit_price : REAL NOT NULL
+  subtotal : REAL NOT NULL
 }
 entity "order_item_options" as order_item_options {
   * order_item_option_id : INTEGER <<PK>>
   --
-  order_item_id : INTEGER <<FK>>
-  option_id : INTEGER <<FK>>
-  price_adjustment : REAL
+  order_item_id : INTEGER NOT NULL <<FK>>
+  option_id : INTEGER NOT NULL <<FK>>
+  price_adjustment : REAL NOT NULL DEFAULT 0
 }
 entity "saved_designs" as saved_designs {
   * design_id : INTEGER <<PK>>
   --
-  user_id : INTEGER <<FK>>
-  design_name : TEXT
-  file_path : TEXT
+  user_id : INTEGER NOT NULL <<FK>>
+  design_name : TEXT NOT NULL
+  file_path : TEXT NOT NULL
 }
 entity "notifications" as notifications {
   * notification_id : INTEGER <<PK>>
   --
-  user_id : INTEGER <<FK>>
-  title : TEXT
-  message : TEXT
-  created_at : TEXT
-  is_read : INTEGER
+  user_id : INTEGER NOT NULL <<FK>>
+  title : TEXT NOT NULL
+  message : TEXT NOT NULL
+  created_at : TEXT NOT NULL
+  is_read : INTEGER NOT NULL DEFAULT 0
 }
 entity "promotions" as promotions {
   * promotion_id : INTEGER <<PK>>
   --
-  title : TEXT
+  title : TEXT NOT NULL
   description : TEXT
-  discount : REAL
-  start_date : TEXT
-  end_date : TEXT
+  discount : REAL NOT NULL
+  start_date : TEXT NOT NULL
+  end_date : TEXT NOT NULL
 }
 
 users ||--o{ addresses : owns
 users ||--o{ orders : places
 users ||--o{ saved_designs : saves
 users ||--o{ notifications : receives
-categories ||--o{ products : groups
+categories ||--o{ products : contains
 products ||--o{ product_options : offers
 products ||--o{ order_items : ordered_as
 orders ||--|{ order_items : contains
 order_items ||--o{ order_item_options : selects
 product_options ||--o{ order_item_options : chosen_as
 
+note bottom of order_item_options
+Application logic checks that the selected option
+belongs to the order item's product.
+end note
 note bottom of promotions
-Independent offer records.
+Independent general offers; no foreign key.
 end note
 @enduml

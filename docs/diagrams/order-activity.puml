@@ -1,57 +1,55 @@
 @startuml
-title PrintXpress - Place and manage an order
+title PrintXpress - Place an order
 
 start
-:Browse category and product;
-:Review product details;
-:Select available print options;
-:Enter quantity, custom text, and/or choose artwork;
-if (Customization valid?) then (yes)
-  :Calculate unit price and subtotal;
-else (no)
-  :Show validation errors;
-  stop
-endif
+:Browse categories and products;
+:Select a product and view details;
+repeat
+  :Customize product and select required options;
+  :Enter custom text and/or select artwork\nwhere applicable;
+  :Enter quantity;
+  :Validate quantity, required options and content;
+  if (Customization invalid?) then (yes)
+    :Show errors and allow correction;
+  else (no)
+    :Mark item ready;
+  endif
+repeat while (Item not ready?) is (yes) not (no)
+
+:Calculate LKR prices using BigDecimal;
 :Review order summary;
-:Select Pickup or Home Delivery;
-if (Home Delivery?) then (yes)
-  :Select or enter delivery address;
-  if (Address valid?) then (yes)
-    :Continue to scheduling;
-  else (no)
-    :Show address errors;
-    stop
+repeat
+  :Choose Pickup or Home Delivery;
+  if (Home Delivery?) then (yes)
+    :Select or add delivery address;
+  else (pickup)
+    :No delivery address required;
   endif
-else (pickup)
-  :Use pickup location;
-endif
-:Select scheduled pickup/delivery date and time;
-if (Schedule valid?) then (yes)
-  :Save order, items, and selected options\nin one SQLite transaction;
-  if (Save succeeded?) then (yes)
-    :Set status to Processing;
-    :Show confirmation and order details;
+  :Choose scheduled pickup/delivery date and time;
+  :Validate address, schedule and complete order;
+  if (Checkout invalid?) then (yes)
+    :Show errors and allow correction;
   else (no)
-    :Roll back and show order error;
-    stop
+    :Mark checkout ready;
   endif
-else (no)
-  :Show schedule error;
+repeat while (Checkout not ready?) is (yes) not (no)
+
+:Verify every selected option belongs\nto its order item's product;
+if (Option-product mismatch?) then (yes)
+  :Reject order and show error;
   stop
-endif
-if (Customer requests cancellation or rescheduling?) then (yes)
-  :Reload current order status;
-  if (Status is Processing?) then (yes)
-    if (Cancel?) then (yes)
-      :Set status to Cancelled;
-    else (reschedule)
-      :Update scheduled_for and rescheduled_at;
-    endif
-  else (no)
-    :Explain that the order can no longer be changed;
-  endif
 else (no)
-  :Keep current order details;
+  :Begin SQLite transaction;
+  :Create Order with status Processing;
+  :Create one or more OrderItem rows;
+  :Save selected OrderItemOption rows;
+  if (All rows saved?) then (yes)
+    :Commit transaction;
+    :Show order confirmation;
+  else (no)
+    :Roll back transaction;
+    :Show order-save error;
+  endif
 endif
 stop
 @enduml

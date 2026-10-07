@@ -1,0 +1,148 @@
+# PrintXpress — Project Plan
+
+**Module:** CSE5011 Mobile Application Development  
+**Submission deadline:** 16 October 2026  
+**Project workspace:** C:\Users\hp\Desktop\mad
+
+## Goal and working rules
+
+Build an original, working native Android application for a Sri Lankan digital printing service. Prioritize correct order flow, SQLite integration, validation, a consistent UI, testing, and clear assignment evidence. Work in small, buildable phases. Use Java for application code and XML for layouts. Do not use Kotlin, Flutter, React Native, Ionic, or a web application. No deployment or hosting is required.
+
+The existing reference PDF, DOCX, and ZIP in the workspace are source material only. Do not copy another student's text, code, diagrams, or screenshots. Do not claim a feature passes until it has been executed and checked.
+
+## Agreed feature scope
+
+- Account: registration, login, profile editing, logout, and delivery address management.
+- Catalogue: browse the seven product categories, products, prices, sizes, materials, and specifications.
+- Customization: select print options and quantity; enter custom text; choose artwork with Android's file picker; optionally save a design.
+- Checkout: review prices, choose pickup or home delivery, validate the address when needed, place an order, and save the order and items to SQLite.
+- Orders: view history and details, track status, and cancel or reschedule before printing begins.
+- Information: local notifications, promotional offers, sample designs, print guidelines, and FAQ/support information.
+
+**Categories:** Business Cards, Flyers, Posters, Banners, Stickers, T-Shirts, and Mugs.
+
+The first implementation may use local sample catalogue content and local order status changes. It must not imply that a print shop or delivery service is connected.
+
+## Screen and navigation plan
+
+1. Splash
+2. Login
+3. Register
+4. Home
+5. Product Categories
+6. Product List
+7. Product Details
+8. Customize Print
+9. Artwork Selection
+10. Order Summary
+11. Pickup / Delivery
+12. My Orders
+13. Order Details / Tracking
+14. Notifications / Offers
+15. Profile
+
+Navigation: Splash → Login/Register → Home → Categories → Product List → Product Details → Customize Print → Artwork/Custom Text → Order Summary → Pickup/Delivery → Confirm Order → My Orders → Order Details/Tracking.
+
+Saved designs, print guidelines, FAQ/support, address management, and logout may be sections within these screens. Activities and fragments will be chosen for the simplest reliable navigation once the Android project scaffold is in place.
+
+## Database plan
+
+Use a local SQLite database named **PrintXpressDB**. Enable foreign keys, use integer primary keys, and keep data access in DatabaseHelper. Dates will use a consistent stored format. Seed the seven categories and an original starter catalogue once.
+
+| Table | Initial columns | Relationship |
+| --- | --- | --- |
+| users | user_id, full_name, email, phone, password | Parent of addresses, orders, saved designs, notifications |
+| addresses | address_id, user_id, address_line, city, district, postal_code | user_id → users |
+| categories | category_id, category_name | Parent of products |
+| products | product_id, category_id, product_name, description, base_price, image_name | category_id → categories |
+| orders | order_id, user_id, order_date, order_type, delivery_address, total_amount, status | user_id → users |
+| order_items | order_item_id, order_id, product_id, quantity, size, material, custom_text, artwork_path, unit_price, subtotal | order_id → orders; product_id → products |
+| saved_designs | design_id, user_id, design_name, file_path | user_id → users |
+| notifications | notification_id, user_id, title, message, created_at, is_read | user_id → users |
+| promotions | promotion_id, title, description, discount, start_date, end_date | Independent offer records |
+
+The planned status values are Processing, Printing, Ready for Pickup, Out for Delivery, Completed, and Cancelled. Cancellation and rescheduling are permitted only while an order is Processing. An additional scheduled date/time field may be needed in orders for rescheduling. Product option definitions and price adjustments may need a small related table rather than hard-coded choices; decide this during Phase 2 before writing the schema. Keep a delivery address snapshot with the order so history remains understandable after profile changes.
+
+Database operations will cover account lookup/create/update, address CRUD, catalogue reads, saved design CRUD, order creation in a transaction, order/history/status reads, permitted order updates, notifications, and promotions. Passwords must never be stored as plain text even though the required column is named password; the exact student-friendly hashing approach will be documented before implementation.
+
+## Validation and business rules
+
+- Require a name, valid email and phone number, a suitable password, and matching confirmation.
+- Reject duplicate email addresses; never save an invalid registration.
+- Require all product options needed by the selected product and quantity greater than zero.
+- Require artwork or custom text when the selected print product needs customer content.
+- Require a saved or entered address for Home Delivery; pickup needs no delivery address.
+- Calculate the order total from item data and save order and item rows together.
+- Permit cancellation or rescheduling only before Printing begins; make status changes visible in order details.
+
+Exact input limits and price rules will be set during implementation and recorded in the technical documentation.
+
+## Proposed initial Android project structure
+
+This is a proposal only. **No Android application code or Gradle files have been created yet.**
+
+    mad/
+    ├── .gitignore
+    ├── README.md
+    ├── PROJECT_PLAN.md
+    ├── settings.gradle
+    ├── build.gradle
+    ├── gradle.properties
+    ├── gradlew / gradlew.bat
+    ├── gradle/wrapper/
+    ├── app/
+    │   ├── build.gradle
+    │   └── src/
+    │       ├── main/
+    │       │   ├── AndroidManifest.xml
+    │       │   ├── java/com/printxpress/app/
+    │       │   │   ├── activities/
+    │       │   │   ├── fragments/
+    │       │   │   ├── models/
+    │       │   │   ├── adapters/
+    │       │   │   ├── database/
+    │       │   │   └── utils/
+    │       │   └── res/
+    │       │       ├── layout/
+    │       │       ├── drawable/
+    │       │       ├── mipmap-*/
+    │       │       └── values/
+    │       ├── test/java/com/printxpress/app/
+    │       └── androidTest/java/com/printxpress/app/
+    └── docs/
+        ├── task-a/  task-b/  task-c/  task-d/  task-e/  task-f/
+        ├── diagrams/
+        ├── database/
+        └── screenshots/
+
+The app package will be com.printxpress.app. Keep screen, model, adapter, database, and utility classes small enough to explain in a viva. Use Android SDK components and add a dependency such as RecyclerView or Material Components only when it serves an implemented screen. Select compatible Android Gradle Plugin, SDK, and Java versions after checking the Android Studio environment.
+
+## Development phases
+
+| Phase | Deliverable and check |
+| --- | --- |
+| 1. Foundation | Inspect workspace; create plan, README, docs, Git ignore; agree Android scaffold. |
+| 2. Database and models | Create schema, models, seeds, and database methods; verify relationships and queries. |
+| 3. Authentication | Register, login, profile, addresses, and form validation. |
+| 4. Product browsing | Home, categories, product list/details, and adapters. |
+| 5. Print customization | Options, quantity, text, artwork picker, and price calculation. |
+| 6. Orders | Summary, pickup/delivery, transactional save, history, tracking, cancellation/rescheduling. |
+| 7. Additional features | Notifications, promotions, saved designs, guidelines, FAQ/support. |
+| 8. UI polish | Consistent layout, spacing, navigation, empty states, and error messages. |
+| 9. Testing | Execute positive and negative cases, fix defects, record real outcomes. |
+| 10. Documentation | Finalize Tasks A–F, diagrams, evidence, user/technical guides, and README. |
+
+Keep Git commits tied to actual completed work. Do not commit build output, local SDK paths, credentials, or fabricated evidence.
+
+## Assignment evidence plan
+
+- **Task A:** Original critical comparison of Android/iOS, Android Studio/Xcode, Java/Kotlin/Swift, native/cross-platform, and database choices; justify Android + Java + XML + SQLite.
+- **Task B:** Use case, class, activity, and ER diagrams; explain 1NF, 2NF, 3NF and final schema/design choices.
+- **Task C:** Capture attractive UI designs and real completed screens.
+- **Task D:** Show relevant Java, XML, SQLite, CRUD, validation, catalogue, customization, artwork, orders, tracking, notifications, and profile evidence.
+- **Task E:** Prepare about 20 useful positive and negative test cases with ID, objective, data, steps, expected result, actual result, and status. Leave actual result and status blank until tested.
+- **Task F:** Write user and technical documentation, including requirements, installation/run steps, navigation, architecture, database, structure, important classes, validation, and testing.
+
+## Current status and next gate
+
+Phase 1 planning files and documentation directories are being prepared. The application has not been scaffolded, built, executed, or tested. Next, review the proposed Android project structure and schema additions. After agreement, create a minimal native Android Studio project in Phase 1 and verify it in Android Studio when the toolchain is available.

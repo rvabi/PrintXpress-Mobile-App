@@ -1,0 +1,38 @@
+# Android and Gradle output
+.gradle/
+build/
+app/build/
+*/build/
+.cxx/
+.externalNativeBuild/
+captures/
+outputs/
+
+# Local machine and Android Studio state
+local.properties
+.idea/
+*.iml
+*.ipr
+*.iws
+.DS_Store
+Thumbs.db
+
+# Signing keys and credentials
+*.jks
+*.keystore
+*.p12
+*.pem
+*.key
+.env
+.env.*
+!.env.example
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+
+# Supplied reference materials (kept locally, not project deliverables)
+/hdcsecmu2926 (2).pdf
+/icbthdcse5011writ1-1013.docx
+/MAD.zip

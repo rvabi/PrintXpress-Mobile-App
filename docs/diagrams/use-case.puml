@@ -21,9 +21,8 @@ rectangle "PrintXpress Mobile Application" {
     usecase "View Product Details" as UC_Details
     usecase "Customize Product" as UC_Customize
     usecase "Select Product Options" as UC_Options
-    usecase "Upload Artwork" as UC_Artwork
+    usecase "Select Local Artwork" as UC_Artwork
     usecase "Enter Custom Text" as UC_Text
-    usecase "View Sample Designs" as UC_Samples
     usecase "View Saved Designs" as UC_Designs
   }
 
@@ -54,7 +53,6 @@ Customer -- UC_Categories
 Customer -- UC_Products
 Customer -- UC_Details
 Customer -- UC_Customize
-Customer -- UC_Samples
 Customer -- UC_Designs
 Customer -- UC_Order
 Customer -- UC_History

@@ -2,7 +2,7 @@
 
 **Module:** CSE5011 Mobile Application Development  
 **Submission deadline:** 16 October 2026  
-**Project workspace:** C:\Users\hp\Desktop\mad
+**Current repository:** C:\Users\SHALINI\OneDrive\Desktop\MAD\PrintXpress-Mobile-App
 
 ## Goal and working rules
 
@@ -17,7 +17,7 @@ The existing reference PDF, DOCX, and ZIP in the workspace are source material o
 - Customization: select print options and quantity; enter custom text; choose artwork with Android's file picker; optionally save a design.
 - Checkout: review prices, choose pickup or home delivery, validate the address when needed, place an order, and save the order and items to SQLite.
 - Orders: view history and details, track status, and cancel or reschedule before printing begins.
-- Information: local notifications, promotional offers, sample designs, print guidelines, and FAQ/support information.
+- Information: local notifications, promotional offers, saved designs, print guidelines, and FAQ/support information. A separate sample-design gallery remains a historical proposal and is not claimed as implemented.
 
 **Categories:** Business Cards, Flyers, Posters, Banners, Stickers, T-Shirts, and Mugs.
 
@@ -47,7 +47,7 @@ The first implementation may use local sample catalogue content and local order 
 
 Navigation: Splash → Login/Register → Home → Product Categories → Product List → Product Details → Customize Print → Artwork Selection (when needed) → Order Summary → Pickup / Delivery → Order Confirmation → My Orders → Order Details / Tracking.
 
-Home, My Orders, Notifications / Offers and Profile are the four main bottom-navigation destinations. Profile links to Manage Addresses, Saved Designs and Print Guidelines / FAQ; logout returns to Login. See docs/task-c/screen-specifications.md for the nineteen planned destinations. Activities and fragments will be chosen for reliable navigation after the Android project scaffold is created.
+Home, My Orders, Notifications / Offers and Profile are the four main bottom-navigation destinations. Profile links to Manage Addresses, Saved Designs and Print Guidelines / FAQ; logout returns to Login. See docs/task-c/screen-specifications.md for the nineteen planned destinations. The implementation uses one `MainActivity` with Java-created Views inside XML layout containers; the earlier multi-Activity/Fragment mapping is retained in Task C as a historical design proposal.
 
 ## Database plan
 
@@ -73,7 +73,7 @@ Product choices are rows in product_options: option_id INTEGER PRIMARY KEY AUTOI
 
 Selected choices are rows in order_item_options: order_item_option_id INTEGER PRIMARY KEY AUTOINCREMENT, order_item_id INTEGER NOT NULL, option_id INTEGER NOT NULL, and price_adjustment REAL NOT NULL DEFAULT 0, with foreign keys to order_items and product_options. Its adjustment is a checkout-time price snapshot. DatabaseHelper/application logic must verify that each selected product_options.product_id equals the related order_items.product_id before saving; foreign keys alone do not enforce this. order_items has no fixed size or material columns; it holds order_item_id INTEGER PRIMARY KEY AUTOINCREMENT, order_id INTEGER NOT NULL, product_id INTEGER NOT NULL, quantity INTEGER NOT NULL, custom_text TEXT, artwork_path TEXT, unit_price REAL NOT NULL, and subtotal REAL NOT NULL, with foreign keys to orders and products.
 
-Currency is Sri Lankan Rupees (LKR). Monetary database columns remain REAL for this academic project, but Java price calculations must use BigDecimal, never direct floating-point totals. Round unit prices, item subtotals, option adjustments, and order totals to exactly two decimal places before SQLite persistence and UI display. Keep a delivery address snapshot in orders so history remains understandable after profile edits. Database operations will cover account lookup/create/update, address CRUD, catalogue and option reads, saved design CRUD, order creation in a transaction, order/history/status reads, permitted order updates, notifications, and promotions. Passwords must never be stored as plain text even though the required column is named password; the exact student-friendly hashing approach will be documented before implementation. See docs/database/database-design.md, schema.md, and normalization.md.
+Currency is Sri Lankan Rupees (LKR). Monetary database columns remain REAL for this academic project, but Java price calculations use BigDecimal, never direct floating-point totals. Unit prices, item subtotals, option adjustments, and order totals are rounded to two decimal places before SQLite persistence and UI display. A delivery address snapshot remains in orders after profile edits. Database operations cover account lookup/create/update, address CRUD, catalogue and option reads, saved design CRUD, order creation in a transaction, order/history/status reads, permitted order updates, notifications, and promotions. Passwords are stored as versioned, randomly salted PBKDF2 hashes in the existing `password` TEXT column; API 24, API 25 and API 35 authentication were verified. See docs/database/database-design.md, schema.md, and normalization.md.
 
 ## Validation and business rules
 - Require a name, valid email and phone number, a suitable password, and matching confirmation.
@@ -84,11 +84,11 @@ Currency is Sri Lankan Rupees (LKR). Monetary database columns remain REAL for t
 - Calculate the order total from item data and save order and item rows together.
 - Permit cancellation or rescheduling only when status is Processing; reject both actions for Printing, Ready for Pickup, Out for Delivery, Completed, and Cancelled.
 
-Exact input limits and the detailed pricing formula will be recorded during implementation; the approved LKR BigDecimal/two-decimal policy applies throughout.
+Implemented input limits and the pricing formula are described in Task D; the approved LKR BigDecimal/two-decimal policy applies throughout.
 
 ## Proposed initial Android project structure
 
-This is a proposal only. **No Android application code or Gradle files have been created yet.**
+This structure was the original Phase 1 proposal. The actual Java/XML module was added on 8 October 2026; see `docs/task-d/IMPLEMENTATION.md` for its implemented structure.
 
     mad/
     ├── .gitignore
@@ -124,7 +124,7 @@ This is a proposal only. **No Android application code or Gradle files have been
         ├── database/
         └── screenshots/
 
-The app package will be com.printxpress.app. Keep screen, model, adapter, database, and utility classes small enough to explain in a viva. Use Android SDK components and add a dependency such as RecyclerView or Material Components only when it serves an implemented screen. Select compatible Android Gradle Plugin, SDK, and Java versions after checking the Android Studio environment.
+The app package is `com.printxpress.app`. The actual module uses one Activity, `DatabaseHelper.OrderLine`, SQLite, and small Java utility classes; it does not contain Fragments or RecyclerView adapters. AndroidX AppCompat, AGP 8.9.1, Gradle 8.11.1, Java 17 source compatibility, and SDK 35 were selected for the verified environment.
 
 ## Development phases
 
@@ -154,4 +154,4 @@ Keep Git commits tied to actual completed work. Do not commit build output, loca
 
 ## Current status and next gate
 
-Phase 1 planning files and documentation directories are prepared. The eleven-table database design is approved and documented for Task B, with PlantUML source diagrams prepared. The application has not been scaffolded, built, executed, or tested. Tomorrow, create the native Java/XML Android Studio project on the laptop with Android Studio, using the installed compatible SDK and Gradle defaults; then verify a clean sync and launch before implementing database code.
+Phases 1–7 now have a working local Java/XML/SQLite implementation in this repository. The Android module was first added on 8 October 2026 after inspection confirmed that the clone contained only planning files. On the new PC, `assembleDebug`, `test`, and `lint` succeeded; the full order flow ran on a Pixel 6 API 35 emulator, authentication also ran on API 24 and API 25, all 35 Task E cases were executed, and real screenshots were captured. See the implementation log and Task E for exact results and defects fixed. Phase 8 received an initial smaller-screen/font-scale check; screen-reader and broader device review remain.

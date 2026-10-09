@@ -1,6 +1,6 @@
 # PrintXpress Android UI Mapping
 
-**Status:** Proposed file and component mapping for the later Android Studio project. The names below describe planned Java classes and XML layouts; none has been created yet. The project will use native Android Views, Java, XML and SQLite.
+**Status:** Historical file and component proposal. The actual implementation uses `MainActivity.java` to render nineteen destinations into `activity_main.xml`, with reusable `view_card.xml`, `DatabaseHelper.java`, `PasswordHasher.java`, and `Money.java`. The classes and layouts below are not the implemented file list; see Task D.
 
 ## Main navigation structure
 

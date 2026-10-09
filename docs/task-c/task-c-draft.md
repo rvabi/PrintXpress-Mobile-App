@@ -1,6 +1,6 @@
 # TASK C – User Interface Design
 
-**Status:** Design draft. The screens described here are planned; no Android interface or screenshots have been produced.
+**Status:** Original design draft. The Java/XML implementation and real API 24/API 25/API 35 screenshots now exist. Future-tense descriptions below are design intentions; actual architecture and verified behavior are recorded in Tasks D and E. The proposed sample-design gallery, featured-product cards and category grid are not present in the current app; Home instead provides search, category navigation, an informational idea card and a guidelines link.
 
 ## 1. Introduction
 
@@ -8,7 +8,7 @@ PrintXpress will provide a customer interface for browsing printing products, pr
 
 ## 2. Design Approach
 
-The interface will use a clean hierarchy with one clear primary action on each screen. Dark blue will identify the brand and important actions, while white cards and a pale background will keep product details readable. A gold accent will draw attention to offers without making promotions appear to reduce the checkout total. Repeated labels, card patterns and spacing will help customers recognize actions as they move from browsing to ordering.
+The interface uses a clean hierarchy with one clear primary action on each screen. The approved mint/coral palette identifies actions, while white cards and the warm light background keep details readable. Promotions remain informational and do not reduce the checkout total.
 
 ## 3. Navigation Design
 
@@ -26,7 +26,7 @@ Errors will appear next to the affected input or option, preserving entries for 
 
 ## 6. Accessibility and Responsiveness
 
-Text will use system fonts and scalable sp sizes, with primary body text around 16sp. Dark text on white cards and white text on the dark blue primary colour will support contrast. Buttons and icon actions will aim for at least 48dp touch targets and clear labels or content descriptions. Longer forms and product information will scroll, and layouts will use flexible widths so common Android phone sizes and increased font settings remain usable. These decisions will require device checks after implementation.
+Text uses system fonts and scalable sp sizes, with primary body text around 16sp. Dark text on white cards and mint buttons supports readability. Buttons aim for at least 48dp touch targets. Forms scroll on the tested Pixel 6 API 35 emulator; broader device and accessibility checks remain pending.
 
 ## 7. Design Consistency
 
@@ -34,4 +34,4 @@ The style guide defines a small palette, typography roles and a 4dp-based spacin
 
 ## 8. Conclusion
 
-The interface prioritizes clear ordering, prices and status. Its restrained design should be practical to implement with Java and XML Views. Actual screenshots and claims about usability will be added only after the running Android application is built and tested.
+The interface prioritizes clear ordering, prices and status. Actual emulator screenshots are listed in the screenshot plan. Broader device usability still needs review.

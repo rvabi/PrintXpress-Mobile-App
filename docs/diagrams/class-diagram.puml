@@ -1,5 +1,5 @@
 @startuml
-title PrintXpress - Planned domain class diagram
+title PrintXpress - Conceptual domain model and implemented helper API
 skinparam classAttributeIconSize 0
 skinparam linetype ortho
 
@@ -91,15 +91,21 @@ package "Domain models" {
 
 package "Persistence" {
   class DatabaseHelper {
-    +createTables(): void
-    +registerUser(user: User): long
-    +authenticateUser(email: String, password: String): User
-    +getProducts(): List
-    +createOrder(order: Order, items: List): long
-    +getUserOrders(userId: long): List
-    +updateOrderStatus(orderId: long, status: String): boolean
-    +cancelOrder(orderId: long): boolean
-    +rescheduleOrder(orderId: long, scheduledFor: String): boolean
+    +onCreate(db: SQLiteDatabase): void
+    +register(name: String, email: String, phone: String, password: char[]): long
+    +authenticate(email: String, password: char[]): long
+    +products(categoryId: long, search: String): Cursor
+    +options(productId: long): Cursor
+    +createOrder(userId: long, type: String, address: String, scheduledUtc: String, lines: List): long
+    +cancel(userId: long, orderId: long): boolean
+    +reschedule(userId: long, orderId: long, newUtc: String): boolean
+  }
+  class "DatabaseHelper.OrderLine" as OrderLine {
+    +productId: long
+    +quantity: int
+    +customText: String
+    +artworkUri: String
+    +optionIds: List
   }
 }
 
@@ -116,13 +122,15 @@ ProductOption "1" -- "0..*" OrderItemOption : chosen as
 DatabaseHelper ..> User
 DatabaseHelper ..> Product
 DatabaseHelper ..> Order
+DatabaseHelper ..> OrderLine
 
 note right of User
 password holds a hash, never plain text.
 end note
 note right of DatabaseHelper
-Planned responsibilities include foreign-key setup,
-transactional order save, option-product matching,
-and Processing-only customer order changes.
+Domain entities above describe SQLite records, not
+separate Java classes. The helper uses Cursor rows and
+OrderLine input. It checks option ownership and current
+Processing status inside SQLite transactions.
 end note
 @enduml

@@ -1,10 +1,10 @@
 # Task A – Critical Comparison of Mobile Operating Systems, Development Tools and Technologies
 
-**Status:** Academic draft for review. This is original PrintXpress-specific analysis, not a final submitted version.
+**Status:** Technology evaluation checked against the implemented PrintXpress stack on 8 October 2026. The cited official URLs and page titles were reviewed on that date; this document remains original PrintXpress-specific analysis.
 
 ## 1. Introduction
 
-PrintXpress is a proposed customer application for a Sri Lankan digital printing service. Customers need to compare products, select specifications, submit artwork, choose pickup or delivery, and review orders. The comparison prioritizes device support, reliable local data, a clear workflow and the assessment constraints. The choice is an academic implementation decision, not a claim that one platform is universally superior.
+PrintXpress is a customer application for a Sri Lankan digital printing service. Customers compare products, select specifications, choose local artwork, arrange pickup or delivery, and review orders. This evaluation prioritizes device support, reliable local data, a clear workflow and the assessment constraints. The choice is an academic implementation decision, not a claim that one platform is universally superior.
 
 ## 2. Android vs iOS
 
@@ -55,24 +55,24 @@ Together, these choices allow PrintXpress to demonstrate customer forms, product
 
 Android, Android Studio, Java, XML and SQLite match the required submission and the available teaching context. iOS, Xcode, Swift, Kotlin, Room and cross-platform frameworks each have valid strengths, especially for broader commercial development. This project needs a clear, testable native Android implementation. PrintXpress should therefore focus on correct validation, relational integrity, usable layouts and evidence from actual device testing.
 
-## 10. References — PROVISIONAL
+## 10. References
 
-These official-source entries require a final manual check of titles, dates and URL availability before submission.
+Official-source URLs and displayed titles were checked on 8 October 2026. `n.d.` is used where no publication date is asserted here.
 
-- Apple (n.d.-a) ‘Swift’. *Apple Developer*. Available at: https://developer.apple.com/swift/ (Accessed: 7 October 2026).
-- Apple (n.d.-b) ‘VoiceOver’. *Apple Developer Documentation*. Available at: https://developer.apple.com/documentation/accessibility/voiceover (Accessed: 7 October 2026).
-- Apple (n.d.-c) ‘Xcode’. *Apple Developer*. Available at: https://developer.apple.com/xcode/ (Accessed: 7 October 2026).
-- Apple (n.d.-d) ‘SDKs and system requirements’. *Apple Developer*. Available at: https://developer.apple.com/xcode/system-requirements/ (Accessed: 7 October 2026).
-- Firebase (n.d.-a) ‘Cloud Firestore Data model’. *Firebase Documentation*. Available at: https://firebase.google.com/docs/firestore/data-model (Accessed: 7 October 2026).
-- Firebase (n.d.-b) ‘Access data offline’. *Firebase Documentation*. Available at: https://firebase.google.com/docs/firestore/manage-data/enable-offline (Accessed: 7 October 2026).
-- Flutter (n.d.) ‘Frequently asked questions’. *Flutter Documentation*. Available at: https://docs.flutter.dev/resources/faq (Accessed: 7 October 2026).
-- Google (n.d.-a) ‘Android’s Kotlin-first approach’. *Android Developers*. Available at: https://developer.android.com/kotlin/first (Accessed: 7 October 2026).
-- Google (n.d.-b) ‘Debug your app’. *Android Developers*. Available at: https://developer.android.com/studio/debug (Accessed: 7 October 2026).
-- Google (n.d.-c) ‘Device compatibility overview’. *Android Developers*. Available at: https://developer.android.com/guide/practices/compatibility (Accessed: 7 October 2026).
-- Google (n.d.-d) ‘Install Android Studio’. *Android Developers*. Available at: https://developer.android.com/studio/install (Accessed: 7 October 2026).
-- Google (n.d.-e) ‘Layouts in views’. *Android Developers*. Available at: https://developer.android.com/develop/ui/views/layout/declaring-layout (Accessed: 7 October 2026).
-- Google (n.d.-f) ‘Make apps more accessible (Views)’. *Android Developers*. Available at: https://developer.android.com/guide/topics/ui/accessibility/views/apps-views (Accessed: 7 October 2026).
-- Google (n.d.-g) ‘Save data using SQLite’. *Android Developers*. Available at: https://developer.android.com/training/data-storage/sqlite (Accessed: 7 October 2026).
-- Google (n.d.-h) ‘Save data in a local database using Room’. *Android Developers*. Available at: https://developer.android.com/training/data-storage/room (Accessed: 7 October 2026).
-- Ionic (n.d.) ‘Introduction to Ionic’. *Ionic Documentation*. Available at: https://ionicframework.com/docs (Accessed: 7 October 2026).
-- React Native (n.d.) ‘React Native’. *React Native Documentation*. Available at: https://reactnative.dev/ (Accessed: 7 October 2026).
+- Apple (n.d.-a) ‘Swift’. *Apple Developer*. Available at: https://developer.apple.com/swift/ (Accessed: 8 October 2026).
+- Apple (n.d.-b) ‘VoiceOver’. *Apple Developer Documentation*. Available at: https://developer.apple.com/documentation/accessibility/voiceover (Accessed: 8 October 2026).
+- Apple (n.d.-c) ‘Xcode’. *Apple Developer*. Available at: https://developer.apple.com/xcode/ (Accessed: 8 October 2026).
+- Apple (n.d.-d) ‘SDKs and system requirements’. *Apple Developer*. Available at: https://developer.apple.com/xcode/system-requirements/ (Accessed: 8 October 2026).
+- Firebase (n.d.-a) ‘Cloud Firestore Data model’. *Firebase Documentation*. Available at: https://firebase.google.com/docs/firestore/data-model (Accessed: 8 October 2026).
+- Firebase (n.d.-b) ‘Access data offline’. *Firebase Documentation*. Available at: https://firebase.google.com/docs/firestore/manage-data/enable-offline (Accessed: 8 October 2026).
+- Flutter (n.d.) ‘Frequently asked questions’. *Flutter Documentation*. Available at: https://docs.flutter.dev/resources/faq (Accessed: 8 October 2026).
+- Google (n.d.-a) ‘Android’s Kotlin-first approach’. *Android Developers*. Available at: https://developer.android.com/kotlin/first (Accessed: 8 October 2026).
+- Google (n.d.-b) ‘Debug your app’. *Android Developers*. Available at: https://developer.android.com/studio/debug (Accessed: 8 October 2026).
+- Google (n.d.-c) ‘Device compatibility overview’. *Android Developers*. Available at: https://developer.android.com/guide/practices/compatibility (Accessed: 8 October 2026).
+- Google (n.d.-d) ‘Install Android Studio’. *Android Developers*. Available at: https://developer.android.com/studio/install (Accessed: 8 October 2026).
+- Google (n.d.-e) ‘Layouts in views’. *Android Developers*. Available at: https://developer.android.com/develop/ui/views/layout/declaring-layout (Accessed: 8 October 2026).
+- Google (n.d.-f) ‘Make apps more accessible (Views)’. *Android Developers*. Available at: https://developer.android.com/guide/topics/ui/accessibility/views/apps-views (Accessed: 8 October 2026).
+- Google (n.d.-g) ‘Save data using SQLite’. *Android Developers*. Available at: https://developer.android.com/training/data-storage/sqlite (Accessed: 8 October 2026).
+- Google (n.d.-h) ‘Save data in a local database using Room’. *Android Developers*. Available at: https://developer.android.com/training/data-storage/room (Accessed: 8 October 2026).
+- Ionic (n.d.) ‘Introduction to Ionic’. *Ionic Documentation*. Available at: https://ionicframework.com/docs (Accessed: 8 October 2026).
+- React Native (n.d.) ‘React Native’. *React Native Documentation*. Available at: https://reactnative.dev/ (Accessed: 8 October 2026).

@@ -1,6 +1,6 @@
 # PrintXpress Screen Specifications
 
-**Status:** Planned interface only. Nineteen destinations are specified below; no Android screen has been implemented or captured. The screen names in this document are the naming reference for Task C.
+**Status:** Original nineteen-destination specification. All nineteen destinations now have a route in `MainActivity`; real captures are indexed in `screenshot-plan.md`. Descriptions below retain planned details that may exceed the current implementation; Task D and Task E identify verified behavior and pending polish.
 
 ## Shared rules
 

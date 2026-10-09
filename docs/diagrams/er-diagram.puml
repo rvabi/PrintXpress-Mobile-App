@@ -1,5 +1,5 @@
 @startuml
-title PrintXpressDB - Proposed ER diagram
+title PrintXpressDB - Implemented ER diagram
 hide circle
 skinparam linetype ortho
 
@@ -7,7 +7,7 @@ entity "users" as users {
   * user_id : INTEGER <<PK>>
   --
   full_name : TEXT NOT NULL
-  email : TEXT NOT NULL UNIQUE
+  email : TEXT NOT NULL COLLATE NOCASE UNIQUE
   phone : TEXT NOT NULL
   password : TEXT NOT NULL
 }
@@ -112,8 +112,18 @@ product_options ||--o{ order_item_options : chosen_as
 note bottom of order_item_options
 Application logic checks that the selected option
 belongs to the order item's product.
+UNIQUE(order_item_id, option_id) prevents duplicate selection.
 end note
 note bottom of promotions
 Independent general offers; no foreign key.
+end note
+note bottom of product_options
+UNIQUE(product_id, option_type, option_value)
+prevents duplicate catalogue choices.
+end note
+note bottom of orders
+status CHECK allows six approved states;
+order_type CHECK allows Pickup or Home Delivery.
+scheduled_for is required; rescheduled_at is nullable.
 end note
 @enduml

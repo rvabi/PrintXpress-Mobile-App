@@ -1,6 +1,6 @@
 # PrintXpress Database Normalization
 
-**Status:** Task B design explanation for a proposed SQLite database. The example is hypothetical; no application database has been implemented.
+**Status:** Task B normalization explanation. The worked order 42 example remains hypothetical; the described eleven-table SQLite database is now implemented and was exercised with real emulator orders.
 
 ## Worked example: unnormalized form (UNF)
 
@@ -35,7 +35,7 @@ A user can have several reusable addresses, so addresses is a separate table lin
 
 ## Final normalized relational schema
 
-Uppercase table labels below are presentation style; the proposed SQLite identifiers in schema.md use lowercase. PK means primary key, FK means foreign key. NOT NULL and UNIQUE are shown only where already specified in schema.md; proposed composite uniqueness rules are not added here.
+Uppercase table labels below are presentation style; the implemented SQLite identifiers in schema.md use lowercase. PK means primary key, FK means foreign key. The complete NOT NULL, UNIQUE and CHECK constraints are specified in schema.md and `DatabaseHelper.onCreate`.
 
     USERS(
       user_id PK,
@@ -131,4 +131,4 @@ Uppercase table labels below are presentation style; the proposed SQLite identif
       end_date NOT NULL
     )
 
-Every order must be created with at least one order item in one transaction; a foreign key alone cannot enforce that minimum. Application/DatabaseHelper logic must also verify that each selected product_options.product_id equals its order_items.product_id. Customer cancellation and rescheduling are permitted only while status is Processing. scheduled_for is mandatory, while rescheduled_at remains nullable and records the most recent reschedule action. Monetary values are LKR; Java will calculate with BigDecimal and round to two decimal places before writing the approved SQLite REAL fields or displaying values.
+Every order is created with at least one order item in one transaction; a foreign key alone cannot enforce that minimum. `DatabaseHelper` also verifies that each selected `product_options.product_id` equals its `order_items.product_id`. Customer cancellation and rescheduling are permitted only while the current status is Processing. `scheduled_for` is mandatory, while `rescheduled_at` remains nullable and records the most recent reschedule action. Monetary values are LKR; Java calculates with BigDecimal and rounds to two decimal places before writing the approved SQLite REAL fields or displaying values.

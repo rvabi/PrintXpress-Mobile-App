@@ -31,7 +31,6 @@ Login --> Home : login succeeds
 
 Home --> Categories : browse categories
 Home --> Products : local search
-Home --> Details : featured product
 Categories --> Products : choose category
 Products --> Details : choose product
 Details --> Customize : customize
@@ -65,7 +64,8 @@ note right of Home
 Main bottom navigation has four destinations:
 Home, Orders, Notifications, Profile.
 Any main tab can switch to another.
-Sample designs appear within Home content.
+Home provides search, category browsing and
+an informational idea card; no sample gallery.
 end note
 
 note bottom of Fulfillment

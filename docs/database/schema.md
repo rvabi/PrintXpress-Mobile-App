@@ -1,21 +1,21 @@
-# PrintXpress Proposed Relational Schema
+# PrintXpress Implemented Relational Schema
 
 **Database:** PrintXpressDB (SQLite)
-**Status:** Design documentation; tables have not been created or tested.
+**Status:** Design documentation implemented in `DatabaseHelper.java`. All eleven tables were created on the API 35 emulator; `PRAGMA foreign_key_check` returned no violations after two orders.
 
-The type and nullability choices below are proposed for implementation. PK means primary key; FK means foreign key. Enable SQLite foreign-key enforcement. Use integer identifiers and store times as consistently formatted TEXT. The required approved option and order-item columns are retained exactly.
+The types and constraints below match `DatabaseHelper.onCreate`. PK means primary key; FK means foreign key. SQLite foreign-key enforcement is enabled in `onConfigure`. Integer identifiers are used and times are stored as consistently formatted TEXT. The password algorithm is encoded in the existing `users.password` value, so the API 24–25 compatibility fix did not change this schema.
 
 ## users
 
 **Purpose:** Stores one customer account and login identity.
 
-| Column | Proposed type / constraint | Key |
+| Column | SQLite type / constraint | Key |
 | --- | --- | --- |
 | user_id | INTEGER PRIMARY KEY AUTOINCREMENT | PK |
 | full_name | TEXT NOT NULL | |
-| email | TEXT NOT NULL UNIQUE | |
+| email | TEXT NOT NULL COLLATE NOCASE UNIQUE | |
 | phone | TEXT NOT NULL | |
-| password | TEXT NOT NULL; contains a password hash | |
+| password | TEXT NOT NULL; versioned salted password hash | |
 
 **Relationships:** One user can have many addresses, orders, saved designs, and notifications.
 
@@ -23,7 +23,7 @@ The type and nullability choices below are proposed for implementation. PK means
 
 **Purpose:** Stores reusable customer delivery addresses.
 
-| Column | Proposed type / constraint | Key |
+| Column | SQLite type / constraint | Key |
 | --- | --- | --- |
 | address_id | INTEGER PRIMARY KEY AUTOINCREMENT | PK |
 | user_id | INTEGER NOT NULL | FK → users.user_id |
@@ -38,7 +38,7 @@ The type and nullability choices below are proposed for implementation. PK means
 
 **Purpose:** Groups print products into the seven agreed categories.
 
-| Column | Proposed type / constraint | Key |
+| Column | SQLite type / constraint | Key |
 | --- | --- | --- |
 | category_id | INTEGER PRIMARY KEY AUTOINCREMENT | PK |
 | category_name | TEXT NOT NULL UNIQUE | |
@@ -49,13 +49,13 @@ The type and nullability choices below are proposed for implementation. PK means
 
 **Purpose:** Stores catalogue products and base prices.
 
-| Column | Proposed type / constraint | Key |
+| Column | SQLite type / constraint | Key |
 | --- | --- | --- |
 | product_id | INTEGER PRIMARY KEY AUTOINCREMENT | PK |
 | category_id | INTEGER NOT NULL | FK → categories.category_id |
 | product_name | TEXT NOT NULL | |
 | description | TEXT | |
-| base_price | REAL NOT NULL | |
+| base_price | REAL NOT NULL CHECK(base_price >= 0) | |
 | image_name | TEXT | |
 
 **Relationships:** One product has many available product_options and can appear in many order_items.
@@ -72,23 +72,23 @@ The type and nullability choices below are proposed for implementation. PK means
 | option_value | TEXT NOT NULL | |
 | price_adjustment | REAL NOT NULL DEFAULT 0 | |
 
-**Relationships:** Many options belong to one product. One option may be selected in many order_item_options. A uniqueness rule on product_id + option_type + option_value is proposed to prevent duplicate catalogue choices.
+**Relationships:** Many options belong to one product. One option may be selected in many order_item_options. `UNIQUE(product_id, option_type, option_value)` prevents duplicate catalogue choices.
 
 ## orders
 
 **Purpose:** Stores an order header, fulfillment choice, current schedule, total, and lifecycle status.
 
-| Column | Proposed type / constraint | Key |
+| Column | SQLite type / constraint | Key |
 | --- | --- | --- |
 | order_id | INTEGER PRIMARY KEY AUTOINCREMENT | PK |
 | user_id | INTEGER NOT NULL | FK → users.user_id |
 | order_date | TEXT NOT NULL | |
-| order_type | TEXT NOT NULL; Pickup or Home Delivery | |
+| order_type | TEXT NOT NULL CHECK(order_type IN ('Pickup','Home Delivery')) | |
 | delivery_address | TEXT; required by app for Home Delivery | |
 | scheduled_for | TEXT NOT NULL | |
 | rescheduled_at | TEXT NULL | |
-| total_amount | REAL NOT NULL | |
-| status | TEXT NOT NULL; initial value Processing | |
+| total_amount | REAL NOT NULL CHECK(total_amount >= 0) | |
+| status | TEXT NOT NULL CHECK(approved six statuses); initial value Processing | |
 
 **Relationships:** Many orders belong to one user. One order has one or more order_items. Customer cancellation/rescheduling is allowed only in Processing status. Other statuses: Printing, Ready for Pickup, Out for Delivery, Completed, Cancelled. scheduled_for is updated to the newly selected time on rescheduling; nullable rescheduled_at records when the most recent action happened. Store both in ISO 8601 UTC text (yyyy-MM-ddTHH:mm:ssZ) and convert selected Sri Lankan local times at the UI boundary.
 
@@ -101,11 +101,11 @@ The type and nullability choices below are proposed for implementation. PK means
 | order_item_id | INTEGER PRIMARY KEY AUTOINCREMENT | PK |
 | order_id | INTEGER NOT NULL | FK → orders.order_id |
 | product_id | INTEGER NOT NULL | FK → products.product_id |
-| quantity | INTEGER NOT NULL | |
+| quantity | INTEGER NOT NULL CHECK(quantity > 0) | |
 | custom_text | TEXT | |
 | artwork_path | TEXT | |
-| unit_price | REAL NOT NULL | |
-| subtotal | REAL NOT NULL | |
+| unit_price | REAL NOT NULL CHECK(unit_price >= 0) | |
+| subtotal | REAL NOT NULL CHECK(subtotal >= 0) | |
 
 **Relationships:** Many items belong to one order; each item refers to one product and can have multiple order_item_options. Size and material are represented by selected option rows, not columns here.
 
@@ -120,13 +120,13 @@ The type and nullability choices below are proposed for implementation. PK means
 | option_id | INTEGER NOT NULL | FK → product_options.option_id |
 | price_adjustment | REAL NOT NULL DEFAULT 0 | |
 
-**Relationships:** Each row belongs to one order item and one catalogue option. A unique pair of order_item_id + option_id is proposed to prevent recording an identical choice twice. Application/DatabaseHelper logic must verify that product_options.product_id matches the related order_items.product_id before saving; the two foreign keys do not enforce this cross-table equality.
+**Relationships:** Each row belongs to one order item and one catalogue option. `UNIQUE(order_item_id, option_id)` prevents recording an identical choice twice. `DatabaseHelper` verifies that `product_options.product_id` matches the related `order_items.product_id` before saving; the two foreign keys do not enforce this cross-table equality.
 
 ## saved_designs
 
 **Purpose:** Stores a user's named design reference for reuse.
 
-| Column | Proposed type / constraint | Key |
+| Column | SQLite type / constraint | Key |
 | --- | --- | --- |
 | design_id | INTEGER PRIMARY KEY AUTOINCREMENT | PK |
 | user_id | INTEGER NOT NULL | FK → users.user_id |
@@ -139,14 +139,14 @@ The type and nullability choices below are proposed for implementation. PK means
 
 **Purpose:** Stores in-app customer notices and read state.
 
-| Column | Proposed type / constraint | Key |
+| Column | SQLite type / constraint | Key |
 | --- | --- | --- |
 | notification_id | INTEGER PRIMARY KEY AUTOINCREMENT | PK |
 | user_id | INTEGER NOT NULL | FK → users.user_id |
 | title | TEXT NOT NULL | |
 | message | TEXT NOT NULL | |
 | created_at | TEXT NOT NULL | |
-| is_read | INTEGER NOT NULL DEFAULT 0 | |
+| is_read | INTEGER NOT NULL DEFAULT 0 CHECK(is_read IN (0,1)) | |
 
 **Relationships:** Many notifications belong to one user. is_read uses 0/1 in SQLite.
 
@@ -154,7 +154,7 @@ The type and nullability choices below are proposed for implementation. PK means
 
 **Purpose:** Stores informational offers displayed to customers. The discount value is a percentage, not a money amount.
 
-| Column | Proposed type / constraint | Key |
+| Column | SQLite type / constraint | Key |
 | --- | --- | --- |
 | promotion_id | INTEGER PRIMARY KEY AUTOINCREMENT | PK |
 | title | TEXT NOT NULL | |

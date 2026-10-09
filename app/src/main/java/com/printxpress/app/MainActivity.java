@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,11 +41,13 @@ public final class MainActivity extends AppCompatActivity {
     private static final int PICK_ARTWORK = 44;
     private DatabaseHelper db;
     private LinearLayout content, navigation;
+    private ScrollView scrollContent;
     private TextView title;
     private long userId, categoryId, productId, orderId;
     private String artworkUri, artworkName, customText = "";
     private String pendingDesignUri, pendingDesignName;
     private int quantity = 1;
+    private boolean homeDeliverySelected;
     private final List<Long> optionIds = new ArrayList<>();
     private BigDecimal unitPrice = Money.amount("0");
     private Runnable backAction;
@@ -62,6 +65,7 @@ public final class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         db = new DatabaseHelper(this);
         content = findViewById(R.id.content);
+        scrollContent = findViewById(R.id.scroll_content);
         navigation = findViewById(R.id.navigation);
         title = findViewById(R.id.title);
         userId = getPreferences(MODE_PRIVATE).getLong("loggedInUserId", -1);
@@ -72,6 +76,7 @@ public final class MainActivity extends AppCompatActivity {
         backAction = back;
         title.setText(heading);
         content.removeAllViews(); navigation.removeAllViews();
+        scrollContent.post(() -> scrollContent.scrollTo(0, 0));
         navigation.setVisibility(tabs ? View.VISIBLE : View.GONE);
         if (back != null) link(content, "← Back", back);
         if (tabs) {
@@ -113,9 +118,20 @@ public final class MainActivity extends AppCompatActivity {
     private EditText field(LinearLayout parent, String label, int inputType) {
         text(parent, label, 14, true);
         EditText e = new EditText(this);
+        e.setSingleLine((inputType & InputType.TYPE_TEXT_FLAG_MULTI_LINE) == 0);
         e.setInputType(inputType); e.setTextSize(16); e.setHint(label);
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        p.bottomMargin = dp(14); parent.addView(e, p); return e;
+        p.bottomMargin = dp(14); parent.addView(e, p);
+        if ((inputType & InputType.TYPE_TEXT_VARIATION_PASSWORD) != 0) {
+            TextView toggle = text(parent, "Show password", 14, true);
+            toggle.setTextColor(getColor(R.color.coral)); toggle.setMinHeight(dp(48));
+            toggle.setOnClickListener(v -> {
+                boolean showing = toggle.getText().toString().startsWith("Hide");
+                e.setInputType(InputType.TYPE_CLASS_TEXT | (showing ? InputType.TYPE_TEXT_VARIATION_PASSWORD : InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD));
+                e.setSelection(e.length()); toggle.setText(showing ? "Show password" : "Hide password");
+            });
+        }
+        return e;
     }
     private String value(EditText e) { return e.getText().toString().trim(); }
     private void message(String s) { Toast.makeText(this, s, Toast.LENGTH_LONG).show(); }
@@ -182,7 +198,7 @@ public final class MainActivity extends AppCompatActivity {
         LinearLayout offer = card(content);
         text(offer, "Made for your next big idea", 18, true);
         text(offer, "Explore seven print categories. Offers are informational and do not reduce order totals.", 15, false);
-        link(content, "Print guidelines & FAQ", this::showInfo);
+        link(content, "Print guidelines & FAQ", () -> showInfo(this::showHome));
     }
     private void showCategories() {
         screen("Categories", this::showHome, false);
@@ -353,7 +369,7 @@ public final class MainActivity extends AppCompatActivity {
         RadioGroup types = new RadioGroup(this);
         RadioButton pickup = new RadioButton(this); pickup.setText("Pickup"); types.addView(pickup);
         RadioButton home = new RadioButton(this); home.setText("Home Delivery"); types.addView(home);
-        pickup.setChecked(true); content.addView(types);
+        if (homeDeliverySelected) home.setChecked(true); else pickup.setChecked(true); content.addView(types);
         TextView addressLabel = text(content, "Saved delivery address", 16, true);
         Spinner addressSpinner = new Spinner(this);
         List<String> addressTexts = new ArrayList<>();
@@ -364,7 +380,8 @@ public final class MainActivity extends AppCompatActivity {
         content.addView(addressSpinner, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(52)));
         Button addAddress = button(content, "Add address", () -> showAddressForm(0, null, null, null, null, this::showDelivery));
         View.OnClickListener toggle = v -> {
-            boolean visible = home.isChecked(); addressLabel.setVisibility(visible ? View.VISIBLE : View.GONE);
+            boolean visible = home.isChecked(); homeDeliverySelected = visible;
+            addressLabel.setVisibility(visible ? View.VISIBLE : View.GONE);
             addressSpinner.setVisibility(visible ? View.VISIBLE : View.GONE); addAddress.setVisibility(visible ? View.VISIBLE : View.GONE);
         };
         pickup.setOnClickListener(toggle); home.setOnClickListener(toggle); toggle.onClick(pickup);
@@ -402,6 +419,7 @@ public final class MainActivity extends AppCompatActivity {
     }
     private void clearDraft() {
         quantity = 1; customText = ""; artworkUri = null; artworkName = null;
+        homeDeliverySelected = false;
         optionIds.clear(); unitPrice = Money.amount("0");
     }
     private void chooseSchedule(Calendar schedule, TextView output) {
@@ -595,7 +613,10 @@ public final class MainActivity extends AppCompatActivity {
         if (count == 0) text(content, "No saved designs yet. Choose artwork while customizing a product.", 16, false);
     }
     private void showInfo() {
-        screen("Guidelines & FAQ", this::showProfile, false);
+        showInfo(this::showProfile);
+    }
+    private void showInfo(Runnable returnTo) {
+        screen("Guidelines & FAQ", returnTo, false);
         text(content, "Print guidelines", 21, true);
         text(content, "Use a clear, high-resolution image or PDF. Check spelling and layout before placing an order. Artwork stays on this device; this demo has no remote upload.", 16, false);
         text(content, "Frequently asked questions", 21, true);

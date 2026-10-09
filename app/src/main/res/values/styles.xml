@@ -1,0 +1,11 @@
+<resources>
+    <style name="Theme.PrintXpress" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/dark_mint</item>
+        <item name="colorPrimaryDark">@color/dark_mint</item>
+        <item name="colorAccent">@color/coral</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/background</item>
+        <item name="android:navigationBarColor">@color/background</item>
+        <item name="android:windowBackground">@color/background</item>
+    </style>
+</resources>

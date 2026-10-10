@@ -1,0 +1,37 @@
+<resources>
+    <style name="ArtworkActionRow">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">52dp</item>
+        <item name="android:layout_marginStart">26dp</item>
+        <item name="android:layout_marginEnd">26dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:background">@drawable/home_round_white</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+    <style name="ArtworkActionIcon">
+        <item name="android:layout_width">34dp</item>
+        <item name="android:layout_height">34dp</item>
+        <item name="android:layout_marginStart">12dp</item>
+        <item name="android:background">@drawable/home_round_white</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+    <style name="ArtworkActionLabel">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">13dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="ArtworkActionChevron">
+        <item name="android:layout_width">25dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <item name="android:textColor">@color/secondary_text</item>
+        <item name="android:textSize">26sp</item>
+    </style>
+</resources>

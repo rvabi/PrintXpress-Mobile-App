@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.printxpress.app.SplashLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mint">
+
+    <ImageView
+        android:id="@+id/splash_wave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/splash_wave" />
+
+    <ImageView
+        android:id="@+id/splash_top_leaf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/splash_leaf_detail" />
+
+    <View
+        android:id="@+id/splash_top_pearl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/splash_pearl"
+        android:elevation="5dp" />
+
+    <TextView
+        android:id="@+id/splash_wordmark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="PrintXpress"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/splash_tagline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:letterSpacing="0.23"
+        android:singleLine="true"
+        android:text="CUSTOM PRINTS FOR EVERY IDEA"
+        android:textColor="@color/surface" />
+
+    <View
+        android:id="@+id/splash_accent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/splash_indicator_active" />
+
+    <ImageView
+        android:id="@+id/splash_left_leaf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/splash_leaf_detail" />
+
+    <ImageView
+        android:id="@+id/splash_right_leaf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/splash_leaf_detail" />
+
+    <ImageView
+        android:id="@+id/splash_product"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="PrintXpress printed packaging box"
+        android:scaleType="fitCenter"
+        android:src="@drawable/splash_product_box" />
+
+    <com.printxpress.app.SplashBoxFaceView
+        android:id="@+id/splash_box_face"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="Good ideas print better" />
+
+    <View
+        android:id="@+id/splash_side_pearl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/splash_coral_pearl"
+        android:elevation="5dp" />
+
+    <View
+        android:id="@+id/splash_bottom_pearl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/splash_pearl"
+        android:elevation="5dp" />
+
+    <LinearLayout
+        android:id="@+id/splash_indicators"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <View android:layout_width="20dp" android:layout_height="10dp"
+            android:background="@drawable/splash_indicator_active" />
+        <View android:layout_width="20dp" android:layout_height="10dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/splash_indicator_inactive" />
+        <View android:layout_width="9dp" android:layout_height="10dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/splash_indicator_inactive" />
+    </LinearLayout>
+</com.printxpress.app.SplashLayout>

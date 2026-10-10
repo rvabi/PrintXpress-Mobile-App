@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#FAFFFE" android:orientation="vertical">
+    <FrameLayout android:layout_width="match_parent" android:layout_height="156dp">
+        <com.printxpress.app.OrderHeaderView android:layout_width="match_parent" android:layout_height="match_parent" />
+        <ImageView android:layout_width="133dp" android:layout_height="121dp" android:layout_gravity="top|end"
+            android:layout_marginTop="29dp" android:contentDescription="@null" android:scaleType="centerCrop"
+            android:src="@drawable/splash_leaf_detail" />
+        <ImageView android:id="@+id/notifications_back" android:layout_width="48dp" android:layout_height="48dp"
+            android:layout_gravity="top|start" android:layout_marginStart="12dp" android:layout_marginTop="49dp"
+            android:contentDescription="Back to home" android:padding="12dp" android:src="@drawable/register_back_icon" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_gravity="top|center_horizontal" android:layout_marginTop="57dp"
+            android:text="Notifications" android:textColor="#0A1E2C" android:textSize="27sp" android:textStyle="bold" />
+    </FrameLayout>
+    <ScrollView android:id="@+id/notifications_scroll" android:layout_width="match_parent" android:layout_height="match_parent"
+        android:clipToPadding="false" android:scrollbars="none">
+        <LinearLayout android:id="@+id/notifications_list" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:paddingStart="17dp" android:paddingTop="9dp"
+            android:paddingEnd="17dp" android:paddingBottom="22dp" />
+    </ScrollView>
+</LinearLayout>

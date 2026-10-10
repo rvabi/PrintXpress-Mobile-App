@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:overScrollMode="never"
+    android:scrollbars="none">
+
+    <com.printxpress.app.RegisterLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.printxpress.app.RegisterBackdropView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@null" />
+
+        <ImageView
+            android:id="@+id/register_top_leaf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/splash_leaf_detail" />
+
+        <ImageView
+            android:id="@+id/register_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Back to Login"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/register_back_icon" />
+
+        <TextView
+            android:id="@+id/register_wordmark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans"
+            android:gravity="center_vertical"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:text="PrintXpress"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/register_tagline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans"
+            android:gravity="center_vertical"
+            android:includeFontPadding="false"
+            android:letterSpacing="0.21"
+            android:singleLine="true"
+            android:text="CUSTOM PRINTS FOR EVERY IDEA"
+            android:textColor="@color/secondary_text"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/register_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans"
+            android:gravity="center_vertical"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:text="Create Account"
+            android:textColor="#101825"
+            android:textSize="31sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/register_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans"
+            android:gravity="center_vertical"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:text="Join PrintXpress and start printing"
+            android:textColor="@color/secondary_text"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/register_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/login_field"
+            android:drawableStart="@drawable/register_name_icon"
+            android:drawablePadding="20dp"
+            android:elevation="4dp"
+            android:hint="Full name"
+            android:inputType="textCapWords|textPersonName"
+            android:maxLines="1"
+            android:paddingStart="17dp"
+            android:paddingEnd="17dp"
+            android:textColor="@color/primary_text"
+            android:textColorHint="@color/secondary_text"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/register_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/login_field"
+            android:drawableStart="@drawable/login_email_icon"
+            android:drawablePadding="20dp"
+            android:elevation="4dp"
+            android:hint="Email address"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:paddingStart="17dp"
+            android:paddingEnd="17dp"
+            android:textColor="@color/primary_text"
+            android:textColorHint="@color/secondary_text"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/register_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/login_field"
+            android:drawableStart="@drawable/login_lock_icon"
+            android:drawablePadding="20dp"
+            android:elevation="4dp"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:paddingStart="17dp"
+            android:paddingEnd="55dp"
+            android:textColor="@color/primary_text"
+            android:textColorHint="@color/secondary_text"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/register_password_eye"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Show password"
+            android:elevation="8dp"
+            android:padding="6dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/login_eye_icon" />
+
+        <EditText
+            android:id="@+id/register_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/login_field"
+            android:drawableStart="@drawable/login_lock_icon"
+            android:drawablePadding="20dp"
+            android:elevation="4dp"
+            android:hint="Confirm password"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:paddingStart="17dp"
+            android:paddingEnd="55dp"
+            android:textColor="@color/primary_text"
+            android:textColorHint="@color/secondary_text"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/register_confirm_eye"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Show password confirmation"
+            android:elevation="8dp"
+            android:padding="6dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/login_eye_icon" />
+
+        <Button
+            android:id="@+id/register_create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/login_button"
+            android:elevation="5dp"
+            android:text="Create Account"
+            android:textAllCaps="false"
+            android:textColor="@color/surface"
+            android:textSize="19sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/register_social_divider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <View android:layout_width="0dp" android:layout_height="1dp"
+                android:layout_weight="1" android:background="@color/border" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginStart="16dp" android:layout_marginEnd="16dp"
+                android:text="or sign up with" android:textColor="@color/secondary_text"
+                android:textSize="14sp" />
+            <View android:layout_width="0dp" android:layout_height="1dp"
+                android:layout_weight="1" android:background="@color/border" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/register_socials"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <com.printxpress.app.LoginSocialIconView
+                android:layout_width="0dp" android:layout_height="match_parent"
+                android:layout_weight="1" android:background="@drawable/login_social_tile"
+                android:contentDescription="Google registration unavailable" android:elevation="3dp"
+                android:tag="google" />
+            <com.printxpress.app.LoginSocialIconView
+                android:layout_width="0dp" android:layout_height="match_parent"
+                android:layout_marginStart="18dp" android:layout_weight="1"
+                android:background="@drawable/login_social_tile"
+                android:contentDescription="Apple registration unavailable" android:elevation="3dp"
+                android:tag="apple" />
+            <com.printxpress.app.LoginSocialIconView
+                android:layout_width="0dp" android:layout_height="match_parent"
+                android:layout_marginStart="18dp" android:layout_weight="1"
+                android:background="@drawable/login_social_tile"
+                android:contentDescription="Facebook registration unavailable" android:elevation="3dp"
+                android:tag="facebook" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/register_sign_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:text="Already have an account? Sign In"
+            android:textColor="@color/secondary_text"
+            android:textSize="15sp" />
+    </com.printxpress.app.RegisterLayout>
+</ScrollView>

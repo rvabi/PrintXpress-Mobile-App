@@ -1,6 +1,6 @@
 # Task D — PrintXpress Implementation
 
-**Status (8 October 2026):** Implemented in the existing repository and exercised on a Pixel 6 API 35 emulator. This document describes the code that exists; test outcomes and gaps are in [Task E](../task-e/TEST_PLAN.md).
+**Status (10 October 2026):** Implemented in the existing repository. The 15 approved visual screens have real API 35 emulator captures, and functional checks have also run on API 24 and API 25. Test outcomes and limits are in [Task E](../task-e/TEST_PLAN.md).
 
 ## Android Studio and build environment
 
@@ -16,9 +16,9 @@ Run from the repository root with a compatible JDK and SDK configured:
 
 ## Java/XML architecture and package structure
 
-The app uses AndroidX AppCompat, Java application source, Android XML Views and direct SQLite APIs. `app/src/main/res/layout/activity_main.xml` defines the title, scrolling content container and four-destination navigation container. `view_card.xml` and XML drawables provide reusable rounded cards and buttons. `colors.xml` contains the approved mint/coral palette. `MainActivity.java` renders the nineteen planned destinations into those XML View containers and inflates cards for catalogue and order rows.
+The app uses AndroidX AppCompat, Java application source, Android XML Views and direct SQLite APIs. `app/src/main/res/layout/activity_main.xml` hosts the 15 approved main-screen overlays plus a scrolling content container for additional functional destinations. Screen-specific XML layouts, XML drawables and small Java custom View helpers create the mint curves, rounded controls and decorative treatments. `colors.xml` contains the approved mint/coral palette. `MainActivity.java` handles navigation and binds real catalogue, order and account data to these Views.
 
-There is currently **one Activity** (`MainActivity`) and **no Fragments, RecyclerView adapters or separate model classes**. `DatabaseHelper.OrderLine` is the order-input model. The small lists use native `ScrollView` and `LinearLayout` cards; RecyclerView was not needed for the seeded seven-product catalogue and is not included as a dependency. The earlier `docs/task-c/android-ui-mapping.md` proposed fragments/adapters before coding and is retained as a historical design proposal. Product and order information is read through `Cursor` queries and shown in Java-created View controls within the XML-defined screen.
+There is **one Activity** (`MainActivity`) and **no Fragments or RecyclerView adapters**. `DatabaseHelper.OrderLine` is the order-input model. The small lists use native `ScrollView` and `LinearLayout` cards; RecyclerView is not a dependency. The earlier `docs/task-c/android-ui-mapping.md` proposed fragments/adapters before coding and is a historical design proposal. Product and order information comes from `Cursor` queries and appears in XML-defined screens with Java-created data rows.
 
 | Package/file | Responsibility |
 | --- | --- |
@@ -27,7 +27,14 @@ There is currently **one Activity** (`MainActivity`) and **no Fragments, Recycle
 | `database/DatabaseHelper.java` | Schema, one-time seeds, queries, CRUD, transactions, order status updates and local notices |
 | `security/PasswordHasher.java` | Versioned, salted PBKDF2 password derivation and verification across API levels |
 | `pricing/Money.java` | BigDecimal rounding and `LKR 1,500.00` formatting |
-| `res/layout`, `res/drawable`, `res/values` | XML View containers, rounded surfaces, launcher icon, strings and approved colors |
+| `SplashLayout`, `LoginLayout`, `RegisterLayout` and other small View helpers | Responsive positioning and selected decorative geometry for approved screens |
+| `res/layout`, `res/drawable`, `res/drawable-nodpi`, `res/values` | Native screen layouts, interactive styles, approved reusable artwork and colours |
+
+## Final UI implementation
+
+The 15 approved screens run from Splash through Help & Support; [Task C](../task-c/screen-specifications.md) maps each visual screen to its behavior and [the final screenshot index](../task-c/screenshot-plan.md) lists real API 35 captures. The additional Customize Print, Order Details / Tracking, Manage Addresses, Saved Designs, Edit Profile and Guidelines & FAQ destinations remain part of the same Activity. The UI uses the reference assets as reusable decorative or product elements, never a complete reference screenshot as an interactive screen. Social icons are unavailable visual controls; Forgot Password is informational. The checkout stepper does not implement payment processing, and Live Chat is marked unavailable.
+
+Login and Register retain EditText validation and working password visibility controls; registration asks for a phone number in a dialog after its four visible fields. Categories and listings show seeded SQLite records. Product detail leads to dynamic option selection and the Android artwork picker. The order summary updates its BigDecimal total when quantity changes. Checkout retains Home Delivery address selection, Store Pickup without an address, and date/time scheduling. Confirmation, My Orders and notification messages format real order IDs as `#PX` followed by at least six digits; this presentation does not change SQLite IDs or foreign keys.
 
 ## SQLite and data behavior
 
@@ -49,10 +56,10 @@ Schedule values are stored as ISO 8601 UTC text and displayed in Sri Lankan loca
 
 Artwork selection uses Android `ACTION_OPEN_DOCUMENT` with image/PDF MIME filters. The app reads the displayed filename and requests a persisted read grant for the returned content URI. It can choose, change or remove the current artwork reference. A saved design stores the URI and name for later reuse, including after app restart. The app does not upload artwork or send orders to a server.
 
-Notifications are **in-app SQLite records**, inserted on order creation, rescheduling and cancellation and listed beside a display-only promotion. There is no operating-system notification channel, remote push service, print-shop backend or live courier tracking in this academic local workflow.
+Notifications are **in-app SQLite records**, inserted on order creation, rescheduling and cancellation and listed beside a display-only promotion. Customer-facing notification text formats a referenced order ID with the same `#PX` convention as confirmation and history while preserving the stored numeric ID and navigation target. There is no operating-system notification channel, remote push service, print-shop backend or live courier tracking in this academic local workflow.
 
 ## Validation and tested scope
 
 Registration checks required fields, email format, a 9–15 character phone pattern, password length plus letter/number, confirmation match and duplicate email. Login checks required fields, email format and credentials. Customization requires quantity greater than zero and text or artwork; delivery requires a future schedule and an address only for Home Delivery. Field errors appear on affected inputs and checkout failures do not show confirmation.
 
-Real API 35 emulator testing covered pickup and delivery, profile/address editing, saved designs, search, artwork change/removal, validation, notices, logout, restart persistence and Processing-only order changes. API 24, API 25 and API 35 authentication regressions passed through the native UI. Direct instrumentation passed nine tests on each emulator, including five password-format cases and all five locked order statuses. The Gradle Unified Test Platform runner on this PC failed to collect results before reporting test cases, so direct instrumentation was used. A smaller API 25 display at 1.3 font scale showed readable Home content and a scrollable Register form; broader device and accessibility polish remains.
+Real API 35 emulator testing covered pickup and delivery, profile/address editing, saved designs, search, artwork change/removal, validation, notices, logout, restart persistence and Processing-only order changes across the recorded test history. The 10 October regression created and then rescheduled/cancelled a new Home Delivery order after verifying dynamic options, LKR 4,800.00 total, selected artwork and address selection. Fresh API 24, API 25 and API 35 accounts registered and logged in through the approved UI; the API 24/25 records used the SHA1 compatibility marker. Direct instrumentation completed nine tests on each API. Earlier Gradle Unified Test Platform runs failed before collecting results, but the 10 October `connectedDebugAndroidTest` run on a separate `PrintXpress_API35` AVD completed all nine tests successfully. A smaller API 25 display at 1.3 font scale showed readable Home content and a scrollable Register form; broader screen-reader and physical-device accessibility review remains.

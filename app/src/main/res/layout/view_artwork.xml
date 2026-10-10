@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#FAFFFE" android:orientation="vertical">
+    <ScrollView android:id="@+id/artwork_scroll" android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:overScrollMode="never" android:scrollbars="none">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"
+            android:paddingBottom="14dp">
+            <FrameLayout android:layout_width="match_parent" android:layout_height="260dp" android:background="@color/mint">
+                <ImageView android:layout_width="match_parent" android:layout_height="match_parent"
+                    android:contentDescription="@null" android:scaleType="centerCrop" android:src="@drawable/upload_header_visual" />
+                <ImageView android:id="@+id/artwork_back" android:layout_width="48dp" android:layout_height="48dp"
+                    android:layout_gravity="top|start" android:layout_marginStart="15dp" android:layout_marginTop="51dp"
+                    android:contentDescription="Back" android:padding="12dp" android:src="@drawable/register_back_icon" />
+            </FrameLayout>
+            <TextView android:id="@+id/artwork_heading" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginStart="18dp" android:layout_marginTop="7dp" android:layout_marginEnd="18dp"
+                android:gravity="center" android:text="Upload Your Design" android:textColor="#0A1E2C"
+                android:textSize="28sp" android:textStyle="bold" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="3dp" android:gravity="center"
+                android:text="Add your artwork, logo or photo" android:textColor="@color/secondary_text" android:textSize="16sp" />
+            <LinearLayout android:id="@+id/artwork_upload_area" android:layout_width="match_parent" android:layout_height="165dp"
+                android:layout_marginStart="26dp" android:layout_marginTop="18dp" android:layout_marginEnd="26dp"
+                android:background="@drawable/upload_dashed" android:gravity="center" android:orientation="vertical">
+                <ImageView android:id="@+id/artwork_cloud" android:layout_width="76dp" android:layout_height="60dp"
+                    android:contentDescription="@null" android:scaleType="fitCenter" android:src="@drawable/upload_artwork_illustration" />
+                <TextView android:id="@+id/artwork_upload_label" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp" android:gravity="center" android:text="Tap to upload"
+                    android:textColor="#102B39" android:textSize="17sp" android:textStyle="bold" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp"
+                    android:gravity="center" android:text="Choose a file from this device"
+                    android:textColor="@color/secondary_text" android:textSize="12sp" />
+            </LinearLayout>
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="10dp" android:gravity="center" android:text="Supported formats: PNG, JPG, PDF"
+                android:textColor="@color/secondary_text" android:textSize="12sp" />
+            <LinearLayout android:id="@+id/artwork_gallery" style="@style/ArtworkActionRow" android:layout_marginTop="16dp">
+                <TextView style="@style/ArtworkActionIcon" android:text="▧" android:backgroundTint="@color/dark_mint" />
+                <TextView style="@style/ArtworkActionLabel" android:text="Use from gallery" />
+                <TextView style="@style/ArtworkActionChevron" android:text="›" />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/artwork_files" style="@style/ArtworkActionRow">
+                <TextView style="@style/ArtworkActionIcon" android:text="▤" android:backgroundTint="@color/coral" />
+                <TextView style="@style/ArtworkActionLabel" android:text="Browse device files" />
+                <TextView style="@style/ArtworkActionChevron" android:text="›" />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/artwork_camera" style="@style/ArtworkActionRow" android:alpha="0.55">
+                <TextView style="@style/ArtworkActionIcon" android:text="◎" android:backgroundTint="#8BB6E6" />
+                <TextView style="@style/ArtworkActionLabel" android:text="Camera unavailable" />
+                <TextView style="@style/ArtworkActionChevron" android:text="›" />
+            </LinearLayout>
+            <TextView android:id="@+id/artwork_remove" android:layout_width="match_parent" android:layout_height="44dp"
+                android:layout_marginStart="27dp" android:layout_marginEnd="27dp" android:gravity="center"
+                android:text="Remove artwork" android:textColor="@color/coral" android:textSize="14sp" android:visibility="gone" />
+            <TextView android:id="@+id/artwork_save" android:layout_width="match_parent" android:layout_height="44dp"
+                android:layout_marginStart="27dp" android:layout_marginEnd="27dp" android:gravity="center"
+                android:text="Save this design" android:textColor="@color/dark_mint" android:textSize="14sp" android:visibility="gone" />
+        </LinearLayout>
+    </ScrollView>
+    <TextView android:id="@+id/artwork_continue" android:layout_width="match_parent" android:layout_height="61dp"
+        android:layout_marginStart="26dp" android:layout_marginTop="4dp" android:layout_marginEnd="26dp"
+        android:layout_marginBottom="13dp" android:background="@drawable/login_button" android:gravity="center"
+        android:text="Continue" android:textColor="@color/surface" android:textSize="20sp" android:textStyle="bold" />
+</LinearLayout>

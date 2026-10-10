@@ -1,40 +1,25 @@
-# PrintXpress Task C Screenshot Evidence Plan
+# Task C — Final UI Screenshot Evidence
 
-**Status:** 28 real screenshots captured with `adb shell screencap -p` on 8 October 2026: 25 original Pixel 6 API 35 captures plus one authentication capture each on API 24, API 25 and API 35. Files are stored under `docs/screenshots/`. Each file shows a distinct running-app state. The order confirmation, history and tracking captures were taken before the later UTC-to-Sri-Lanka schedule display fix, so their timestamps show the older UTC presentation.
+**Audit date:** 10 October 2026. These 15 PNGs are real API 35 emulator captures of the running app, stored in docs/screenshots/final-ui. Each is non-empty, 1080×2400 and has a distinct SHA-256 hash. None has the same hash as a design_reference screen PNG. The design references are comparison material only.
 
-| ID | Screen | Purpose / evidence | Feature demonstrated | Capture status |
-| --- | --- | --- | --- | --- |
-| TC-UI-01 | Login | Show account entry | Email/password controls and Register navigation | `01-login.png` |
-| TC-UI-02 | Registration | Show customer form | Name, email, phone, password and confirmation | `02-register.png` |
-| TC-UI-03 | Home | Show main visual hierarchy | Greeting, search, categories, offer and four tabs | `03-home.png` |
-| TC-UI-04 | Categories | Show category browsing | Scrollable seeded categories | `04-categories.png` |
-| TC-UI-05 | Product List | Show a category product | Name, description and starting LKR price | `05-product-list.png` |
-| TC-UI-06 | Product Details | Show product information | Description, base price, options and Customize action | `06-product-details.png` |
-| TC-UI-07 | Customize Product | Show print selection form | Options, text and calculated price | `07-customization-priced.png` |
-| TC-UI-08 | Artwork Selected | Show selected local file | File name and change/remove actions | `08-artwork-selected.png` |
-| TC-UI-09 | Order Summary | Show pre-checkout review | Selected options and LKR total | `09-order-summary.png` |
-| TC-UI-10 | Delivery/Pickup | Show conditional fields | Pickup and Home Delivery address state | `10-pickup-delivery.png`, `10-home-delivery.png` |
-| TC-UI-11 | Order Confirmation | Show database save result | Order #1 and total | `11-order-confirmation.png` |
-| TC-UI-12 | My Orders | Show history | Real order card and status | `12-my-orders.png` |
-| TC-UI-13 | Order Tracking | Show order details | Items, selected options and Processing actions | `13-order-tracking.png` |
-| TC-UI-14 | Notifications/Offers | Show information | Real order notices and display-only offer | `14-notifications.png` |
-| TC-UI-15 | Profile | Show account links | Customer details and support entries | `15-profile.png` |
-
-## Additional captured states
-
-| File | Evidence shown |
+| Screen | Actual emulator evidence |
 | --- | --- |
-| `07-customization.png` | Default customization choices before priced selections |
-| `validation-required-registration.png` | Required registration field error |
-| `validation-invalid-email.png` | Invalid email field error |
-| `validation-short-password.png` | Short password rejected on registration |
-| `validation-duplicate-email.png` | Duplicate email registration attempt |
-| `validation-invalid-login.png` | Incorrect login rejected |
-| `validation-schedule-required.png` | Checkout without a schedule rejected |
-| `validation-missing-content.png` | Customization without text or artwork rejected |
-| `validation-quantity-zero.png` | Quantity zero rejected |
-| `api25-auth-home.png` | API 25 Home after registering and signing in as API25 Tester, recaptured after an unrelated emulator Launcher dialog had appeared |
-| `api35-regression-home.png` | API 35 Home after registering and signing in as API35 Regression |
-| `api24-auth-home.png` | API 24 Home after registering, signing in and restarting as API24 Tester |
+| 01 Splash | screen_01_splash_actual.png |
+| 02 Login | screen_02_login_actual.png |
+| 03 Register | screen_03_register_actual.png |
+| 04 Home | screen_04_home_actual.png |
+| 05 Categories | screen_05_categories_actual.png |
+| 06 Product Listing | screen_06_product_listing_actual.png |
+| 07 Product Detail | screen_07_product_detail_actual.png |
+| 08 Upload Artwork | screen_08_upload_artwork_actual.png |
+| 09 Cart / Order Summary | screen_09_cart_actual.png |
+| 10 Checkout / Fulfilment | screen_10_checkout_actual.png |
+| 11 Order Confirmation | screen_11_order_confirmed_actual.png |
+| 12 My Orders | screen_12_my_orders_actual.png |
+| 13 Notifications | screen_13_notifications_actual.png |
+| 14 Profile | screen_14_profile_actual.png |
+| 15 Help & Support | screen_15_help_support_actual.png |
 
-The profile capture shows the original Test User before the later profile edit; the edit result was checked in the emulator and SQLite, not in that PNG. The Login capture shows the destination after splash routing, not the transient splash itself. No image is reused as evidence for a different screen.
+The Order Confirmation capture shows #PX000006 in full. My Orders shows #PX000006, #PX000005 and #PX000004 in full. Notifications shows full formatted order IDs. These captures document their own observed app state; a screenshot alone does not prove every action or database rule. Functional test evidence is in Task E.
+
+The earlier 25-screen evidence set and three API-specific authentication captures remain in docs/screenshots as historical verification. They are separate from this final UI series; some earlier captures predate later UI and time-format fixes. No older image is substituted for a final UI capture.

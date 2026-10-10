@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/home_page_background"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:id="@+id/home_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:fillViewport="false"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="14dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="69dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="20dp"
+                android:paddingEnd="17dp">
+
+                <TextView
+                    android:id="@+id/home_wordmark"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="sans"
+                    android:includeFontPadding="false"
+                    android:singleLine="true"
+                    android:text="PrintXpress"
+                    android:textSize="29sp"
+                    android:textStyle="bold" />
+
+                <FrameLayout
+                    android:id="@+id/home_notifications"
+                    android:layout_width="43dp"
+                    android:layout_height="48dp"
+                    android:contentDescription="Notifications">
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@null"
+                        android:src="@drawable/home_ic_bell" />
+
+                    <View
+                        android:id="@+id/home_notice_dot"
+                        android:layout_width="7dp"
+                        android:layout_height="7dp"
+                        android:layout_gravity="top|end"
+                        android:layout_marginTop="9dp"
+                        android:layout_marginEnd="7dp"
+                        android:background="@drawable/home_notice_dot"
+                        android:visibility="gone" />
+                </FrameLayout>
+
+                <ImageView
+                    android:id="@+id/home_cart"
+                    android:layout_width="43dp"
+                    android:layout_height="48dp"
+                    android:contentDescription="My orders"
+                    android:padding="9dp"
+                    android:src="@drawable/home_ic_cart" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="51dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:background="@drawable/home_round_white"
+                android:elevation="4dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:layout_marginStart="15dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/home_ic_search" />
+
+                <EditText
+                    android:id="@+id/home_search"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="13dp"
+                    android:layout_marginEnd="13dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:hint="Search for products..."
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:textColor="@color/primary_text"
+                    android:textColorHint="#8297A3"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/home_hero"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="13dp"
+                android:adjustViewBounds="true"
+                android:background="@drawable/home_image_round"
+                android:clipToOutline="true"
+                android:contentDescription="Explore PrintXpress products"
+                android:scaleType="fitCenter"
+                android:src="@drawable/home_hero_banner" />
+
+            <LinearLayout
+                android:id="@+id/home_category_rows"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="13dp"
+                android:layout_marginEnd="13dp"
+                android:orientation="vertical" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="14dp">
+
+                <ImageView
+                    android:id="@+id/home_offer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="Special offers; information only"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/home_special_offer" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="24dp"
+                    android:background="#F9FFFE"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="sans"
+                        android:text="Special Offers"
+                        android:textColor="#091525"
+                        android:textSize="23sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/home_offers_all"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="See All  ›"
+                        android:textColor="@color/coral"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="14dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="sans"
+                    android:text="Popular Products"
+                    android:textColor="#091525"
+                    android:textSize="23sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/home_products_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="See All  ›"
+                    android:textColor="@color/coral"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:scrollbars="none">
+                <LinearLayout
+                    android:id="@+id/home_products"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp" />
+            </HorizontalScrollView>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginEnd="9dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/home_round_white"
+        android:elevation="10dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <LinearLayout android:id="@+id/home_nav_home" style="@style/HomeNavItem">
+            <ImageView style="@style/HomeNavIcon" android:src="@drawable/home_ic_home" />
+            <TextView style="@style/HomeNavLabel" android:text="Home" android:textColor="#23B5AA" android:textStyle="bold" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/home_nav_shop" style="@style/HomeNavItem">
+            <ImageView style="@style/HomeNavIcon" android:src="@drawable/home_ic_shop" />
+            <TextView style="@style/HomeNavLabel" android:text="Shop" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/home_nav_orders" style="@style/HomeNavItem">
+            <ImageView style="@style/HomeNavIcon" android:src="@drawable/home_ic_orders" />
+            <TextView style="@style/HomeNavLabel" android:text="Orders" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/home_nav_profile" style="@style/HomeNavItem">
+            <ImageView style="@style/HomeNavIcon" android:src="@drawable/home_ic_profile" />
+            <TextView style="@style/HomeNavLabel" android:text="Profile" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

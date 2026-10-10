@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#FAFFFE" android:orientation="vertical">
+    <ScrollView android:id="@+id/summary_scroll" android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:fillViewport="true" android:scrollbars="none">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+            <FrameLayout android:layout_width="match_parent" android:layout_height="178dp">
+                <com.printxpress.app.OrderHeaderView android:layout_width="match_parent" android:layout_height="match_parent" />
+                <ImageView android:layout_width="120dp" android:layout_height="130dp" android:layout_gravity="top|end"
+                    android:layout_marginTop="30dp" android:contentDescription="@null" android:scaleType="centerCrop"
+                    android:src="@drawable/splash_leaf_detail" />
+                <ImageView android:id="@+id/summary_back" android:layout_width="48dp" android:layout_height="48dp"
+                    android:layout_gravity="top|start" android:layout_marginStart="12dp" android:layout_marginTop="49dp"
+                    android:contentDescription="Back" android:padding="12dp" android:src="@drawable/register_back_icon" />
+                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_gravity="top|center_horizontal" android:layout_marginTop="55dp"
+                    android:gravity="center" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="My Cart"
+                        android:textColor="#0A1E2C" android:textSize="29sp" android:textStyle="bold" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1 item"
+                        android:textColor="@color/secondary_text" android:textSize="14sp" />
+                </LinearLayout>
+            </FrameLayout>
+            <LinearLayout android:id="@+id/summary_items" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginStart="19dp" android:layout_marginEnd="19dp" android:orientation="vertical" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="50dp"
+                android:layout_marginStart="19dp" android:layout_marginTop="14dp" android:layout_marginEnd="19dp"
+                android:gravity="center_vertical" android:orientation="horizontal">
+                <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+                    android:background="@drawable/order_outline" android:gravity="center_vertical" android:paddingStart="18dp"
+                    android:text="Promotions are display-only" android:textColor="@color/secondary_text" android:textSize="13sp" />
+                <TextView android:layout_width="78dp" android:layout_height="match_parent" android:layout_marginStart="9dp"
+                    android:background="@drawable/order_selected" android:gravity="center" android:text="Info only"
+                    android:textColor="@color/dark_mint" android:textSize="13sp" android:textStyle="bold" />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginStart="19dp" android:layout_marginTop="14dp" android:layout_marginEnd="19dp"
+                android:background="@drawable/home_round_white" android:elevation="3dp" android:orientation="vertical"
+                android:padding="20dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                        android:text="Subtotal" android:textColor="#0A1E2C" android:textSize="17sp" />
+                    <TextView android:id="@+id/summary_subtotal" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:textColor="#0A1E2C" android:textSize="17sp" />
+                </LinearLayout>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="13dp" android:orientation="horizontal">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                        android:text="Delivery" android:textColor="@color/secondary_text" android:textSize="14sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="LKR 0.00" android:textColor="@color/secondary_text" android:textSize="14sp" />
+                </LinearLayout>
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginTop="17dp"
+                    android:background="@color/border" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp" android:orientation="horizontal">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                        android:text="Total" android:textColor="#0A1E2C" android:textSize="23sp" android:textStyle="bold" />
+                    <TextView android:id="@+id/summary_total" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:textColor="#0A1E2C" android:textSize="23sp" android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    <TextView android:id="@+id/summary_continue" android:layout_width="match_parent" android:layout_height="59dp"
+        android:layout_marginStart="22dp" android:layout_marginTop="5dp" android:layout_marginEnd="22dp"
+        android:layout_marginBottom="12dp" android:background="@drawable/login_button" android:gravity="center"
+        android:text="Proceed to Checkout  →" android:textColor="@color/surface" android:textSize="19sp" android:textStyle="bold" />
+</LinearLayout>

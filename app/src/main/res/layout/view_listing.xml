@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mint"
+    android:orientation="vertical">
+
+    <FrameLayout android:layout_width="match_parent" android:layout_height="116dp">
+        <com.printxpress.app.CatalogHeaderView android:layout_width="match_parent" android:layout_height="match_parent" />
+        <ImageView android:layout_width="112dp" android:layout_height="96dp" android:layout_gravity="top|end"
+            android:layout_marginEnd="-34dp" android:contentDescription="@null" android:scaleType="centerCrop"
+            android:src="@drawable/splash_leaf_detail" />
+        <ImageView android:id="@+id/listing_back" android:layout_width="48dp" android:layout_height="48dp"
+            android:layout_gravity="top|start" android:layout_marginStart="10dp" android:layout_marginTop="50dp"
+            android:contentDescription="Back" android:padding="12dp" android:src="@drawable/register_back_icon" />
+        <TextView android:id="@+id/listing_heading" android:layout_width="wrap_content" android:layout_height="48dp"
+            android:layout_gravity="top|center_horizontal" android:layout_marginTop="50dp" android:gravity="center"
+            android:text="Products" android:textColor="#0A1E2C" android:textSize="27sp" android:textStyle="bold" />
+        <ImageView android:id="@+id/listing_search" android:layout_width="48dp" android:layout_height="48dp"
+            android:layout_gravity="top|end" android:layout_marginEnd="8dp" android:layout_marginTop="50dp"
+            android:background="@drawable/home_round_white" android:contentDescription="Search products"
+            android:padding="12dp" android:src="@drawable/home_ic_search" />
+    </FrameLayout>
+
+    <ScrollView android:id="@+id/listing_scroll" android:layout_width="match_parent" android:layout_height="match_parent"
+        android:background="#FAFFFE" android:clipToPadding="false" android:overScrollMode="never" android:scrollbars="none">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"
+            android:paddingBottom="28dp">
+            <HorizontalScrollView android:layout_width="match_parent" android:layout_height="58dp"
+                android:clipToPadding="false" android:scrollbars="none">
+                <LinearLayout android:id="@+id/listing_filters" android:layout_width="wrap_content" android:layout_height="match_parent"
+                    android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="18dp" android:paddingEnd="18dp" />
+            </HorizontalScrollView>
+            <LinearLayout android:id="@+id/listing_grid" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:paddingStart="17dp" android:paddingEnd="17dp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

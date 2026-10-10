@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
     <TextView
         android:id="@+id/title"
@@ -15,6 +19,7 @@
         android:textStyle="bold" />
 
     <ScrollView
+        android:id="@+id/scroll_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -32,4 +37,53 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" />
-</LinearLayout>
+    </LinearLayout>
+
+    <include android:id="@+id/order_summary_overlay" layout="@layout/view_order_summary" android:visibility="gone" />
+    <include android:id="@+id/checkout_overlay" layout="@layout/view_checkout" android:visibility="gone" />
+    <include android:id="@+id/confirmation_overlay" layout="@layout/view_order_confirmation" android:visibility="gone" />
+    <include android:id="@+id/orders_overlay" layout="@layout/view_my_orders" android:visibility="gone" />
+    <include android:id="@+id/notifications_overlay" layout="@layout/view_notifications" android:visibility="gone" />
+    <include android:id="@+id/profile_overlay" layout="@layout/view_profile" android:visibility="gone" />
+    <include android:id="@+id/support_overlay" layout="@layout/view_support" android:visibility="gone" />
+
+    <include
+        android:id="@+id/artwork_overlay"
+        layout="@layout/view_artwork"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/detail_overlay"
+        layout="@layout/view_product_detail"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/listing_overlay"
+        layout="@layout/view_listing"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/categories_overlay"
+        layout="@layout/view_categories"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/home_overlay"
+        layout="@layout/view_home"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/login_overlay"
+        layout="@layout/view_login"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/register_overlay"
+        layout="@layout/view_register"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/splash_overlay"
+        layout="@layout/view_splash"
+        android:visibility="gone" />
+</FrameLayout>
